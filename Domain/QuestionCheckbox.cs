@@ -4,6 +4,6 @@ namespace Domain.Entities
 {
     public class QuestionCheckbox : Question
     {
-        public new bool? Answer { get; set; }
+        public bool? Answer { get; set; }
     }
 }

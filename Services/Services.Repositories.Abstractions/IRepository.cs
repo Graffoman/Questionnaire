@@ -1,18 +1,23 @@
-﻿namespace Services.Repositories.Abstractions
+﻿using MongoDB.Bson;
+
+namespace Services.Repositories.Abstractions
 {
     public interface IRepository<T>
     {
         IQueryable<T> GetAll(bool noTracking = false);
-        Task<List<T>> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false);
-        T Get(Guid id);
-        Task<T> GetAsync(Guid id, CancellationToken cancellationToken);
-        bool Delete(Guid id);
-        bool Delete(T entity);
-        bool DeleteRange(ICollection<T> entities);
-        void Update(T entity);
-        T Add(T entity);
-        Task<T> AddAsync(T entity);
-        void AddRange(List<T> entities);
-        Task AddRangeAsync(ICollection<T> entities);
+        Task<ICollection<T>> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false);
+        T Get(ObjectId id);
+        Task<T> GetAsync(ObjectId id, CancellationToken cancellationToken);
+
+        ObjectId Delete(ObjectId id);
+        Task<ObjectId> DeleteAsync(ObjectId id, CancellationToken cancellationToken);
+        T Delete(T entity);
+        Task<T> DeleteAsync(T entity, CancellationToken cancellationToken);
+
+       T Update(T entity);
+        Task<T> UpdateAsync(T entity, CancellationToken cancellationToken);
+
+        ObjectId Add(T entity);
+        Task<T> AddAsync(T entity, CancellationToken cancellationToken);
     }
 }

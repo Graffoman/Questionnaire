@@ -1,5 +1,4 @@
-using Infrastructure.EntityFramework;
-using WebApi;
+﻿using WebApi;
 
 var host = Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
@@ -10,9 +9,4 @@ var host = Host.CreateDefaultBuilder(args)
                     });
                 }).Build();
 
-using (var scope = host.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-    //db.Database.Migrate();
-}
 host.Run();

@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{333607
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosts", "Hosts", "{5877B68B-8292-4E8F-BCC7-0FA1EAB93BAC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.EntityFramework", "..\Infrastructure\Infrastructure.EntityFramework\Infrastructure.EntityFramework.csproj", "{6DCF9529-9A42-4E20-8892-F966597C67D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.DataAcces", "..\Infrastructure\Infrastructure.EntityFramework\Infrastructure.DataAcces.csproj", "{6DCF9529-9A42-4E20-8892-F966597C67D8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{CB972A8D-8739-425B-857A-33D77DD1D99A}"
 EndProject

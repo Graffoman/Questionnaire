@@ -4,6 +4,6 @@ namespace Domain.Entities
 {
     public class QuestionText : Question
     {
-        public new string? Answer { get; set; }
+        public string? Answer { get; set; }
     }
 }

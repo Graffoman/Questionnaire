@@ -1,4 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Infrastructure.DataAcess;
+using Domain.Entities.BaseClasses;
+using Domain.Entities;
+using MongoDB.Driver;
 
 namespace WebApi.Controllers
 {
@@ -6,28 +10,36 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly MongoDB<Question> _db;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, MongoDB<Question> db)
         {
             _logger = logger;
+            _db = db;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<Question> Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            Console.WriteLine();
+            var quest = new QuestionIntRange()
             {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+                QuestionText = "Выбери Range еще и еще",
+                IsOptional = true,
+                Type = Domain.Entities.Enums.QuestionType.IntRange,
+                Answer = new IntRange(10, 50),
+            };
+
+            _db.Collection.InsertOne(quest);
+
+            var test = _db.Collection.AsQueryable().ToList();
+
+            Console.WriteLine();
+
+            return test;
         }
+
+
     }
 }

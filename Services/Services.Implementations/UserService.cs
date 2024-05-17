@@ -1,18 +1,18 @@
 ﻿using Domain.Entities;
 using MongoDB.Bson;
 using Services.Abstractions;
-using Services.Contracts.QuestionnaireDto;
+using Services.Contracts.UserDto;
 
 namespace Services.Implementations
 {
-    public class QuestionnaireService : IQuestionnaireService
+    public class UserService : IUserService
     {
-        public Task<ObjectId> CreateAsync(CreateQuestionnaireDto createQuestionnaireDto)
+        public Task<ObjectId> CreateAsync(CreateUserDto createUserDto)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ObjectId> DeleteAsync(Questionnaire questionnaire)
+        public Task<ObjectId> DeleteAsync(User user)
         {
             throw new NotImplementedException();
         }
@@ -22,17 +22,17 @@ namespace Services.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<ICollection<Questionnaire>> GetAllAsync()
+        public Task<ICollection<User>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<Questionnaire> GetByIdAsync(ObjectId id)
+        public Task<User> GetByIdAsync(ObjectId id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ObjectId> UpdateAsync(Questionnaire questionnaire)
+        public Task<ObjectId> UpdateAsync(User user)
         {
             throw new NotImplementedException();
         }

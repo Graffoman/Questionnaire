@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 namespace WebApi
 {
@@ -37,11 +36,7 @@ namespace WebApi
             if (!env.IsProduction())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                    c.RoutePrefix = string.Empty;
-                });
+                app.UseSwaggerUI();
             }
 
             app.UseEndpoints(endpoints =>

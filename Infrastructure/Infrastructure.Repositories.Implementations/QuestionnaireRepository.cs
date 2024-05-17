@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 using Services.Contracts.QuestionnaireDto;
 using Services.Repositories.Abstractions;
 
@@ -7,11 +7,17 @@ namespace Infrastructure.Repositories.Implementations
 {
     public class QuestionnaireRepository : Repository<Questionnaire>, IQuestionnaireRepository
     {
-        public QuestionnaireRepository(DbContext context) : base(context)
+        public Task<ObjectId> CreateQuestionnaireAsync(CreateQuestionnaireDto createQuestionnaireDto)
         {
+            throw new NotImplementedException();
         }
 
-        public Task<Guid> CreateQuestionnaireAsync(CreateQuestionnaireDto createQuestionnaireDto)
+        public Task<ObjectId> DeleteQuestionnaireAsync(Questionnaire questionnaire)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ObjectId> DeleteQuestionnaireByIdAsync(ObjectId id)
         {
             throw new NotImplementedException();
         }
@@ -21,7 +27,12 @@ namespace Infrastructure.Repositories.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<Questionnaire> GetQuestionnaireByIdAsync(Guid id)
+        public Task<Questionnaire> GetQuestionnaireByIdAsync(ObjectId id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ObjectId> UpdateQuestionnaireAsync(Questionnaire questionnaire)
         {
             throw new NotImplementedException();
         }
