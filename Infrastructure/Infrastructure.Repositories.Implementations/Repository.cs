@@ -1,10 +1,11 @@
-﻿using Infrastructure.DataAcess;
+﻿using Domain.Entities.Interfaces;
+using Infrastructure.DataAcess;
 using MongoDB.Driver;
 using Services.Repositories.Abstractions;
 
 namespace Infrastructure.Repositories.Implementations
 {
-    public abstract class Repository<T> : IRepository<T> where T : class
+    public abstract class Repository<T> : IRepository<T> where T : class, IIdentifieble
     {
         protected readonly MongoDB<T> Db;
         private readonly IMongoCollection<T> Collection;
@@ -29,22 +30,24 @@ namespace Infrastructure.Repositories.Implementations
 
         public virtual bool Delete(string id)
         {
-            var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), id);
-            var result = Collection.DeleteOne(filter);
+            var result = Collection.DeleteOne(e => e.Id == id);
             return result.IsAcknowledged && result.DeletedCount > 0;
         }
 
         public virtual async Task<bool> DeleteAsync(string id, CancellationToken cancellationToken)
         {
-            var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), id);
-            var result = await Collection.DeleteOneAsync(filter);
+            var result = await Collection.DeleteOneAsync(e => e.Id == id);
             return result.IsAcknowledged && result.DeletedCount > 0;
         }
 
         public virtual T Get(string id)
         {
-            var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), id);
-            return Collection.Find(filter).FirstOrDefault();
+            return Collection.Find(e => e.Id == id).FirstOrDefault();
+        }
+
+        public virtual async Task<T> GetAsync(string id, CancellationToken cancellationToken)
+        {
+            return await Collection.Find(e => e.Id == id).FirstOrDefaultAsync();
         }
 
         public virtual IQueryable<T> GetAll(bool noTracking = false)
@@ -58,22 +61,16 @@ namespace Infrastructure.Repositories.Implementations
             return await Collection.Find(filter).ToListAsync();
         }
 
-        public virtual async Task<T> GetAsync(string id, CancellationToken cancellationToken)
-        {
-            var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), id);
-            return await Collection.Find(filter).FirstOrDefaultAsync();
-        }
-
         public virtual bool Update(T entity)
         {
-            var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), entity.GetType().GetProperty("Id").GetValue(entity));
+            var filter = Builders<T>.Filter.Eq(e => e.Id, entity.Id);
             var result = Collection.ReplaceOne(filter, entity);
             return result.IsAcknowledged && result.ModifiedCount > 0;
         }
 
         public virtual async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken)
         {
-            var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), entity.GetType().GetProperty("Id").GetValue(entity));
+            var filter = Builders<T>.Filter.Eq(e => e.Id, entity.Id);
             var result = await Collection.ReplaceOneAsync(filter, entity);
             return result.IsAcknowledged && result.ModifiedCount > 0;
         }
