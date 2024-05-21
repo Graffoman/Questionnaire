@@ -1,10 +1,11 @@
-﻿using MongoDB.Bson;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace Domain.Entities
 {
     public class User
     {
-        public ObjectId Id { get; set; }
+        [BsonId]
+        public string Id { get; set; }
         public string UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

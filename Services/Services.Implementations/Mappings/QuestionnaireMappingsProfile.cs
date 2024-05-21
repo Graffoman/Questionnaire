@@ -8,7 +8,8 @@ namespace Services.Implementations.Mappings
     {
         public QuestionnaireMappingsProfile()
         {
-            CreateMap<CreateQuestionnaireDto, Questionnaire>();
+            CreateMap<CreateQuestionnaireDto, Questionnaire>()
+                .ForMember(d => d.Id, map => map.Ignore());
         }
     }
 }

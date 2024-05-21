@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using MongoDB.Bson;
 using Services.Contracts.QuestionnaireDto;
 
 namespace Services.Abstractions
@@ -7,9 +6,9 @@ namespace Services.Abstractions
     public interface IQuestionnaireService
     {
         Task<List<Questionnaire>> GetAllAsync();
-        Task<Questionnaire> GetByIdAsync(ObjectId id);
-        Task<ObjectId> CreateAsync(CreateQuestionnaireDto createQuestionnaireDto);
+        Task<Questionnaire> GetByIdAsync(string id);
+        Task<string> CreateAsync(CreateQuestionnaireDto createQuestionnaireDto);
         Task<bool> UpdateAsync(Questionnaire questionnaire);
-        Task<bool> DeleteByIdAsync(ObjectId id);
+        Task<bool> DeleteByIdAsync(string id);
     }
 }

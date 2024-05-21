@@ -1,12 +1,13 @@
 ﻿using Domain.Entities.BaseClasses;
 using Domain.Entities.Enums;
-using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Domain.Entities
 {
     public class Questionnaire
     {
-        public ObjectId Id { get; set; }
+        [BsonId]
+        public string Id { get; set; }
         public ICollection<Question> Questions { get; set; }
         public User Author { get; set; }
         public DateTime CreationDate { get; set; }

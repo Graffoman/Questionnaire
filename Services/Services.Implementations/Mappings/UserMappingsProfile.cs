@@ -8,7 +8,8 @@ namespace Services.Implementations.Mappings
     {
         public UserMappingsProfile()
         {
-            CreateMap<CreateUserDto, User>();
+            CreateMap<CreateUserDto, User>()
+                .ForMember(d => d.Id, map => map.Ignore());
         }
     }
 }

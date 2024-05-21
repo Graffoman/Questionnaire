@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using MongoDB.Bson;
 using Services.Abstractions;
 using Services.Contracts.QuestionnaireDto;
 using Services.Repositories.Abstractions;
@@ -18,14 +17,14 @@ namespace Services.Implementations
             _questionnaireRepository = questionnaireRepository;
         }
 
-        public async Task<ObjectId> CreateAsync(CreateQuestionnaireDto createQuestionnaireDto)
+        public async Task<string> CreateAsync(CreateQuestionnaireDto createQuestionnaireDto)
         {
             var questionnaire = _mapper.Map<CreateQuestionnaireDto, Questionnaire>(createQuestionnaireDto);
             await _questionnaireRepository.AddAsync(questionnaire, CancellationToken.None);
             return questionnaire.Id;
         }
 
-        public Task<bool> DeleteByIdAsync(ObjectId id)
+        public Task<bool> DeleteByIdAsync(string id)
         {
             return _questionnaireRepository.DeleteAsync(id, CancellationToken.None);
         }
@@ -35,7 +34,7 @@ namespace Services.Implementations
             return _questionnaireRepository.GetAllAsync(CancellationToken.None);
         }
 
-        public Task<Questionnaire> GetByIdAsync(ObjectId id)
+        public Task<Questionnaire> GetByIdAsync(string id)
         {
             return _questionnaireRepository.GetAsync(id, CancellationToken.None);
         }

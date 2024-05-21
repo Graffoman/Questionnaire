@@ -58,8 +58,6 @@ namespace WebApi
             {
                 cfg.AddProfile<QuestionnaireMappingsProfile>();
                 cfg.AddProfile<UserMappingsProfile>();
-                //cfg.AddProfile<Services.Implementations.Mapping.CourseMappingsProfile>();
-                //cfg.AddProfile<Services.Implementations.Mapping.LessonMappingsProfile>();
             });
             configuration.AssertConfigurationIsValid();
             return configuration;

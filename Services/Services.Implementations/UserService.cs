@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Domain.Entities;
-using MongoDB.Bson;
 using Services.Abstractions;
 using Services.Contracts.UserDto;
 using Services.Repositories.Abstractions;
@@ -18,14 +17,14 @@ namespace Services.Implementations
             _userRepository = userRepository;
         }
 
-        public async Task<ObjectId> CreateAsync(CreateUserDto createUserDto)
+        public async Task<string> CreateAsync(CreateUserDto createUserDto)
         {
             var user = _mapper.Map<CreateUserDto, User>(createUserDto);
             await _userRepository.AddAsync(user, CancellationToken.None);
             return user.Id;
         }
 
-        public Task<bool> DeleteByIdAsync(ObjectId id)
+        public Task<bool> DeleteByIdAsync(string id)
         {
             return _userRepository.DeleteAsync(id, CancellationToken.None);
         }
@@ -35,7 +34,7 @@ namespace Services.Implementations
             return _userRepository.GetAllAsync(CancellationToken.None);
         }
 
-        public Task<User> GetByIdAsync(ObjectId id)
+        public Task<User> GetByIdAsync(string id)
         {
             return _userRepository.GetAsync(id, CancellationToken.None);
         }

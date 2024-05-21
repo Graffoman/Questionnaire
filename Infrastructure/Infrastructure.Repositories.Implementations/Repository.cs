@@ -1,5 +1,4 @@
 ﻿using Infrastructure.DataAcess;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using Services.Repositories.Abstractions;
 
@@ -28,21 +27,21 @@ namespace Infrastructure.Repositories.Implementations
             return entity;
         }
 
-        public virtual bool Delete(ObjectId id)
+        public virtual bool Delete(string id)
         {
             var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), id);
             var result = Collection.DeleteOne(filter);
             return result.IsAcknowledged && result.DeletedCount > 0;
         }
 
-        public virtual async Task<bool> DeleteAsync(ObjectId id, CancellationToken cancellationToken)
+        public virtual async Task<bool> DeleteAsync(string id, CancellationToken cancellationToken)
         {
             var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), id);
             var result = await Collection.DeleteOneAsync(filter);
             return result.IsAcknowledged && result.DeletedCount > 0;
         }
 
-        public virtual T Get(ObjectId id)
+        public virtual T Get(string id)
         {
             var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), id);
             return Collection.Find(filter).FirstOrDefault();
@@ -59,7 +58,7 @@ namespace Infrastructure.Repositories.Implementations
             return await Collection.Find(filter).ToListAsync();
         }
 
-        public virtual async Task<T> GetAsync(ObjectId id, CancellationToken cancellationToken)
+        public virtual async Task<T> GetAsync(string id, CancellationToken cancellationToken)
         {
             var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), id);
             return await Collection.Find(filter).FirstOrDefaultAsync();
