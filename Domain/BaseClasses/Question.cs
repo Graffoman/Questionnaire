@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Enums;
 using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace Domain.Entities.BaseClasses
 {
@@ -7,7 +8,7 @@ namespace Domain.Entities.BaseClasses
     [BsonKnownTypes(typeof(QuestionCheckbox), typeof(QuestionIntRange), typeof(QuestionMultipleSelect), typeof(QuestionSelect), typeof(QuestionText))]
     public class Question
     {
-        [BsonId]
+        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
         public string Id { get; set; }
         public QuestionType Type { get; set; }
         public string QuestionText { get; set; }
