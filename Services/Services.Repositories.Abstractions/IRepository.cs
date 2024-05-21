@@ -10,10 +10,8 @@ namespace Services.Repositories.Abstractions
         Task<T> GetAsync(ObjectId id, CancellationToken cancellationToken);
 
         bool Delete(ObjectId id);
-        Task<T> DeleteAsync(ObjectId id, CancellationToken cancellationToken);
 
         bool Update(T entity);
-        Task<T> UpdateAsync(T entity, CancellationToken cancellationToken);
 
         T Add(T entity);
         Task AddAsync(T entity, CancellationToken cancellationToken);

@@ -35,14 +35,6 @@ namespace Infrastructure.Repositories.Implementations
             return result.IsAcknowledged && result.DeletedCount > 0;
         }
 
-        public virtual async Task<T> DeleteAsync(ObjectId id, CancellationToken cancellationToken)
-        {
-            //var filter = Builders<T>.Filter.Eq(e => (ObjectId)e.GetType().GetProperty("Id").GetValue(e), id);
-            //return await Collection.DeleteOneAsync(filter);
-
-            throw new NotImplementedException();
-        }
-
         public virtual T Get(ObjectId id)
         {
             var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), id);
@@ -72,14 +64,6 @@ namespace Infrastructure.Repositories.Implementations
             var result = Collection.ReplaceOne(filter, entity);
 
             return result.IsAcknowledged && result.ModifiedCount > 0;
-        }
-
-        public virtual async Task<T> UpdateAsync(T entity, CancellationToken cancellationToken)
-        {
-            //var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), entity.GetType().GetProperty("Id").GetValue(entity));
-            //await Collection.ReplaceOneAsync(filter, entity);
-
-            throw new NotImplementedException();
         }
     }
 }
