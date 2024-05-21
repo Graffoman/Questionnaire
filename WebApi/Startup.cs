@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Services.Implementations.Mappings;
 
 namespace WebApi
 {
@@ -55,8 +56,8 @@ namespace WebApi
         {
             var configuration = new MapperConfiguration(cfg =>
             {
-                //cfg.AddProfile<CourseMappingsProfile>();
-                //cfg.AddProfile<LessonMappingsProfile>();
+                cfg.AddProfile<QuestionnaireMappingsProfile>();
+                cfg.AddProfile<UserMappingsProfile>();
                 //cfg.AddProfile<Services.Implementations.Mapping.CourseMappingsProfile>();
                 //cfg.AddProfile<Services.Implementations.Mapping.LessonMappingsProfile>();
             });
