@@ -12,11 +12,6 @@ namespace Services.Implementations
             throw new NotImplementedException();
         }
 
-        public Task<ObjectId> DeleteAsync(User user)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<ObjectId> DeleteByIdAsync(ObjectId id)
         {
             throw new NotImplementedException();

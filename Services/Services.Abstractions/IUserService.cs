@@ -11,6 +11,5 @@ namespace Services.Abstractions
         Task<ObjectId> CreateAsync(CreateUserDto createUserDto);
         Task<ObjectId> UpdateAsync(User user);
         Task<ObjectId> DeleteByIdAsync(ObjectId id);
-        Task<ObjectId> DeleteAsync(User user);
     }
 }
