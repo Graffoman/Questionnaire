@@ -22,16 +22,23 @@ namespace Infrastructure.Repositories.Implementations
             return entity;
         }
 
-        public virtual async Task AddAsync(T entity, CancellationToken cancellationToken)
+        public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken)
         {
             await Collection.InsertOneAsync(entity, cancellationToken);
+            return entity;
         }
 
         public virtual bool Delete(ObjectId id)
         {
             var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), id);
             var result = Collection.DeleteOne(filter);
+            return result.IsAcknowledged && result.DeletedCount > 0;
+        }
 
+        public virtual async Task<bool> DeleteAsync(ObjectId id, CancellationToken cancellationToken)
+        {
+            var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), id);
+            var result = await Collection.DeleteOneAsync(filter);
             return result.IsAcknowledged && result.DeletedCount > 0;
         }
 
@@ -62,7 +69,13 @@ namespace Infrastructure.Repositories.Implementations
         {
             var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), entity.GetType().GetProperty("Id").GetValue(entity));
             var result = Collection.ReplaceOne(filter, entity);
+            return result.IsAcknowledged && result.ModifiedCount > 0;
+        }
 
+        public virtual async Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken)
+        {
+            var filter = Builders<T>.Filter.Eq(e => e.GetType().GetProperty("Id").GetValue(e), entity.GetType().GetProperty("Id").GetValue(entity));
+            var result = await Collection.ReplaceOneAsync(filter, entity);
             return result.IsAcknowledged && result.ModifiedCount > 0;
         }
     }

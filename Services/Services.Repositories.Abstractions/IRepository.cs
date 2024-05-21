@@ -6,14 +6,17 @@ namespace Services.Repositories.Abstractions
     {
         IQueryable<T> GetAll(bool noTracking = false);
         Task<List<T>> GetAllAsync(CancellationToken cancellationToken, bool asNoTracking = false);
+
         T Get(ObjectId id);
         Task<T> GetAsync(ObjectId id, CancellationToken cancellationToken);
 
         bool Delete(ObjectId id);
+        Task<bool> DeleteAsync(ObjectId id, CancellationToken cancellationToken);
 
         bool Update(T entity);
+        Task<bool> UpdateAsync(T entity, CancellationToken cancellationToken);
 
         T Add(T entity);
-        Task AddAsync(T entity, CancellationToken cancellationToken);
+        Task<T> AddAsync(T entity, CancellationToken cancellationToken);
     }
 }

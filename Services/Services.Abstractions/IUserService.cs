@@ -6,10 +6,10 @@ namespace Services.Abstractions
 {
     public interface IUserService
     {
-        Task<ICollection<User>> GetAllAsync();
+        Task<List<User>> GetAllAsync();
         Task<User> GetByIdAsync(ObjectId id);
         Task<ObjectId> CreateAsync(CreateUserDto createUserDto);
-        Task<ObjectId> UpdateAsync(User user);
-        Task<ObjectId> DeleteByIdAsync(ObjectId id);
+        Task<bool> UpdateAsync(User user);
+        Task<bool> DeleteByIdAsync(ObjectId id);
     }
 }

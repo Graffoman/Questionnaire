@@ -6,10 +6,10 @@ namespace Services.Abstractions
 {
     public interface IQuestionnaireService
     {
-        Task<ICollection<Questionnaire>> GetAllAsync();
+        Task<List<Questionnaire>> GetAllAsync();
         Task<Questionnaire> GetByIdAsync(ObjectId id);
         Task<ObjectId> CreateAsync(CreateQuestionnaireDto createQuestionnaireDto);
-        Task<ObjectId> UpdateAsync(Questionnaire questionnaire);
-        Task<ObjectId> DeleteByIdAsync(ObjectId id);
+        Task<bool> UpdateAsync(Questionnaire questionnaire);
+        Task<bool> DeleteByIdAsync(ObjectId id);
     }
 }

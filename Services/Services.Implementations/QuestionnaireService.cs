@@ -1,35 +1,48 @@
-﻿using Domain.Entities;
+﻿using AutoMapper;
+using Domain.Entities;
 using MongoDB.Bson;
 using Services.Abstractions;
 using Services.Contracts.QuestionnaireDto;
+using Services.Repositories.Abstractions;
 
 namespace Services.Implementations
 {
     public class QuestionnaireService : IQuestionnaireService
     {
-        public Task<ObjectId> CreateAsync(CreateQuestionnaireDto createQuestionnaireDto)
+        private readonly IMapper _mapper;
+        private readonly IQuestionnaireRepository _questionnaireRepository;
+
+        public QuestionnaireService(IMapper mapper, IQuestionnaireRepository questionnaireRepository)
         {
-            throw new NotImplementedException();
+            _mapper = mapper;
+            _questionnaireRepository = questionnaireRepository;
         }
 
-        public Task<ObjectId> DeleteByIdAsync(ObjectId id)
+        public async Task<ObjectId> CreateAsync(CreateQuestionnaireDto createQuestionnaireDto)
         {
-            throw new NotImplementedException();
+            var questionnaire = _mapper.Map<CreateQuestionnaireDto, Questionnaire>(createQuestionnaireDto);
+            await _questionnaireRepository.AddAsync(questionnaire, CancellationToken.None);
+            return questionnaire.Id;
         }
 
-        public Task<ICollection<Questionnaire>> GetAllAsync()
+        public Task<bool> DeleteByIdAsync(ObjectId id)
         {
-            throw new NotImplementedException();
+            return _questionnaireRepository.DeleteAsync(id, CancellationToken.None);
+        }
+
+        public Task<List<Questionnaire>> GetAllAsync()
+        {
+            return _questionnaireRepository.GetAllAsync(CancellationToken.None);
         }
 
         public Task<Questionnaire> GetByIdAsync(ObjectId id)
         {
-            throw new NotImplementedException();
+            return _questionnaireRepository.GetAsync(id, CancellationToken.None);
         }
 
-        public Task<ObjectId> UpdateAsync(Questionnaire questionnaire)
+        public Task<bool> UpdateAsync(Questionnaire questionnaire)
         {
-            throw new NotImplementedException();
+            return _questionnaireRepository.UpdateAsync(questionnaire, CancellationToken.None);
         }
     }
 }
