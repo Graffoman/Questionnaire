@@ -1,17 +1,8 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-
-namespace Domain.Entities.BaseClasses
+﻿namespace Domain.Entities.BaseClasses
 {
-    public class IntRange
+    public class IntRange(int from, int to)
     {
-        public int From { get; set; }
-        public int To { get; set; }
-
-        [BsonConstructor]
-        public IntRange(int from, int to)
-        {
-            From = from;
-            To = to;
-        }
+        public int From { get; set; } = from;
+        public int To { get; set; } = to;
     }
 }

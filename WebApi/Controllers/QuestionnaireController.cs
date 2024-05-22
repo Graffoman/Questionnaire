@@ -43,9 +43,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(string id, CreateQuestionnaireDto createQuestionnaireDto)
+        public async Task<IActionResult> UpdateAsync(string id, UpdateQuestionnaireDto updateQuestionnaireDto)
         {
-            var questionnaire = _mapper.Map<CreateQuestionnaireDto, Questionnaire>(createQuestionnaireDto);
+            var questionnaire = _mapper.Map<UpdateQuestionnaireDto, Questionnaire>(updateQuestionnaireDto);
             questionnaire.Id = id;
 
             await _service.UpdateAsync(questionnaire);

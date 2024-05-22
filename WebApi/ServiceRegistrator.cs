@@ -6,6 +6,7 @@ using Infrastructure.Repositories.Implementations;
 using Services.Implementations;
 using Domain.Entities.BaseClasses;
 using Domain.Entities;
+using Infrastructure.DataAcces;
 
 namespace WebApi
 {
@@ -24,6 +25,7 @@ namespace WebApi
 
         private static IServiceCollection InstallMongoDB(this IServiceCollection serviceCollection)
         {
+            MongoDBClassMap.RegisterClassMaps();
             serviceCollection
                 .AddSingleton<MongoDB<Question>>()
                 .AddSingleton<MongoDB<Questionnaire>>()
