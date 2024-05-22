@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Services.Implementations.Mappings;
+using System.Text.Json.Serialization;
 
 namespace WebApi
 {
@@ -16,7 +17,8 @@ namespace WebApi
         {
             InstallAutomapper(services);
             services.AddServices(Configuration);
-            services.AddControllers();
+            services.AddControllers()
+                    .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddSwaggerGen();
             services.AddCors();
         }
@@ -28,7 +30,9 @@ namespace WebApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseCors(builder => builder.AllowAnyOrigin()
+                                          .AllowAnyMethod()
+                                          .AllowAnyHeader());
 
             app.UseRouting();
 
