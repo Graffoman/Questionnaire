@@ -18,6 +18,7 @@ namespace WebApi
             InstallAutomapper(services);
             services.AddServices(Configuration);
             services.AddControllers()
+                    .AddNewtonsoftJson()
                     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddSwaggerGen();
             services.AddCors();

@@ -22,15 +22,7 @@ namespace Infrastructure.DataAcces
             BsonClassMap.RegisterClassMap<Question>(cm =>
             {
                 cm.AutoMap();
-                //cm.MapIdMember(x => x.Id)
-                //    .SetIdGenerator(new StringObjectIdGenerator())
-                //    .SetSerializer(new StringSerializer(BsonType.ObjectId));
                 cm.SetIsRootClass(true);
-                cm.AddKnownType(typeof(QuestionCheckbox));
-                cm.AddKnownType(typeof(QuestionIntRange));
-                cm.AddKnownType(typeof(QuestionMultipleSelect));
-                cm.AddKnownType(typeof(QuestionSelect));
-                cm.AddKnownType(typeof(QuestionText));
             });
 
             BsonClassMap.RegisterClassMap<QuestionCheckbox>();
@@ -41,6 +33,7 @@ namespace Infrastructure.DataAcces
 
             BsonClassMap.RegisterClassMap<IntRange>(cm =>
             {
+                cm.AutoMap();
                 cm.MapCreator(r => new IntRange(r.From, r.To));
             });
 
