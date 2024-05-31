@@ -27,7 +27,6 @@ namespace WebApi
         {
             MongoDBClassMap.RegisterClassMaps();
             serviceCollection
-                .AddSingleton<MongoDB<Question>>()
                 .AddSingleton<MongoDB<Questionnaire>>()
                 .AddSingleton<MongoDB<User>>();
             return serviceCollection;
