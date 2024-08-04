@@ -1,0 +1,64 @@
+﻿
+<Card Style="width:40rem;margin:10px">
+    <CardBody>
+        <CardSubTitle Class="mb-2 text-muted">Тип: @_Question.Type</CardSubTitle>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Вопрос</label>
+            <InputTextArea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind-Value="@QuestionText"></InputTextArea>
+        </div>
+        <div class="form-check form-switch">
+            <InputCheckbox class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" @bind-Value="@IsOptional"></InputCheckbox>
+            <label class="form-check-label" for="flexSwitchCheckDefault">Вопрос обязательный?</label>
+        </div>
+
+        @switch (_Question.Type)
+        {
+            case QuestionType.MultipleSelect:
+                <div>
+                    @foreach (var option in ((QuestionMultipleSelect)_Question).Options)
+                    {
+                        <p>@option</p>
+                    }
+                </div>
+                break;
+            case QuestionType.Select:
+                <div>
+                    @foreach (var option in ((QuestionSelect)_Question).Options)
+                    {
+                        <p>@option</p>
+                    }
+                </div>
+                break;
+
+            case QuestionType.IntRange:
+                <div>
+                    <p>От: @(((QuestionIntRange)_Question).Limits.From)</p>
+                    <p>До: @(((QuestionIntRange)_Question).Limits.To)</p>
+                </div>
+                break;
+                
+            default:
+                break;
+        }
+        <div>
+            <p>QuestionText=@QuestionText</p>
+            <p>IsOptional=@IsOptional</p>
+        </div>
+
+    </CardBody>
+</Card>
+
+@code {
+
+    [Parameter]
+    public Question _Question { get; set; }
+
+    private string QuestionText { get; set; }
+    private bool IsOptional { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        QuestionText = _Question.QuestionText;
+        IsOptional = _Question.IsOptional;
+    }
+}

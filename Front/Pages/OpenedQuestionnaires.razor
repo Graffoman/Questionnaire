@@ -1,0 +1,18 @@
+﻿@page "/openedquestionnaires"
+@inject HttpClient Http
+
+<PageTitle>Opened Questionnaires</PageTitle>
+
+<h3>Opened Questionnaires</h3>
+
+@code {
+    List<Questionnaire>? questionnaires = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await Http.GetAsync("http://localhost:5239/api/Questionnaire");
+        response.EnsureSuccessStatusCode();
+        var jsonString = await response.Content.ReadAsStringAsync();
+        questionnaires = JsonConvert.DeserializeObject<List<Questionnaire>>(jsonString);
+    }
+}

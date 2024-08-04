@@ -1,0 +1,21 @@
+﻿@if(_Questionnaire == null)
+{
+	
+}
+else
+{
+	<EditForm Model="_Questionnaire" OnSubmit="Submit">
+
+	</EditForm>
+}
+
+@code {
+	[Parameter]
+	[SupplyParameterFromForm]
+	public Questionnaire _Questionnaire { get; set; }
+
+	private void Submit()
+	{
+		
+	}
+}

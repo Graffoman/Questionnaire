@@ -1,0 +1,30 @@
+﻿@using Domain.Entities.BaseClasses
+@using Domain.Entities.Enums
+
+<Card Style="width:40rem;">
+    <CardBody>
+        <CardTitle>Вопрос</CardTitle>
+        <CardSubTitle Class="mb-2 text-muted">Тип: @QuestionType.Checkbox</CardSubTitle>
+        <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Вопрос обязательный?</label>
+        </div>
+    </CardBody>
+</Card>
+
+@code {
+    [Parameter]
+    public Question question { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        question = new();
+        question.Type = QuestionType.Checkbox;
+    }
+
+
+}

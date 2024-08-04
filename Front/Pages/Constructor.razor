@@ -1,0 +1,77 @@
+﻿@page "/constructor"
+@page "/constructor/{questionnaireId}"
+@using Front.Components.Question
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<PageTitle>Constructor</PageTitle>
+
+<h3>Constructor</h3>
+
+@if(_Questionnaire == null)
+{
+	<QuestionCheckboxComponent></QuestionCheckboxComponent>
+}
+else
+{
+
+@* 	<SortableList Class="mb-3"
+				  Handle=".bb-sortable-list-handle"
+				  TItem="Question"
+				  Data="_Questions"
+				  Context="item"
+				  OnUpdate="@OnQuestionsListUpdate">
+
+		<ItemTemplate>
+			<div class="d-flex justify-content-start">
+				<div class="bb-sortable-list-handle pe-2"><Icon Name="IconName.GripVertical" /></div>
+				<div>
+					<QuestionComponent _Question="@item"></QuestionComponent>
+				</div>
+			</div>
+		</ItemTemplate>
+
+	</SortableList> *@
+
+	foreach (var question in _Questionnaire.Questions)
+	{
+		<QuestionComponent _Question="question"></QuestionComponent>
+	}
+}
+
+@code {
+	[Parameter]
+	public string QuestionnaireId { get; set; }
+
+	public Questionnaire _Questionnaire { get; set; }
+
+	// public List<Question> _Questions { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+		var path = uri.AbsolutePath;
+
+		if (path.Length > 12)
+		{
+			var response = await Http.GetAsync($"http://localhost:5239/api/Questionnaire/{QuestionnaireId}");
+			response.EnsureSuccessStatusCode();
+			var jsonString = await response.Content.ReadAsStringAsync();
+			_Questionnaire = JsonConvert.DeserializeObject<Questionnaire>(jsonString, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+
+			// _Questions = _Questionnaire.Questions.ToList();
+		}
+	}
+
+	// private void OnQuestionsListUpdate(SortableListEventArgs args)
+	// {
+	// 	var itemToMove = _Questions[args.OldIndex];
+
+	// 	_Questions.RemoveAt(args.OldIndex);
+
+	// 	if (args.NewIndex < _Questions.Count)
+	// 		_Questions.Insert(args.NewIndex, itemToMove);
+	// 	else
+	// 		_Questions.Add(itemToMove);
+	// }
+}

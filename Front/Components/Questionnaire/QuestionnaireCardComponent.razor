@@ -1,0 +1,19 @@
+﻿
+<Card Class="mb-4" Style="width:20rem; margin:10px">
+    <img class="rounded-top" src="/images/questionnaire_placeholder3.png" alt="placeholder" style="max-height:200px; max-width:200px"/>
+    <CardBody>
+        <CardTitle>@_Questionnaire.Name</CardTitle>
+        <CardSubTitle Class="mb-2 text-muted">Автор: @_Questionnaire.Author.FirstName @_Questionnaire.Author.LastName</CardSubTitle>
+        <CardSubTitle Class="mb-2 text-muted">Создан: @_Questionnaire.CreationDate.ToString("HH:mm dd.MM.yyyy")</CardSubTitle>
+        <CardText>@_Questionnaire.Description</CardText>
+        <div class="d-grid gap-2 d-md-block mt-2">
+            <Button Color="ButtonColor.Primary" To="@($"/constructor/{_Questionnaire.Id}")" Type="ButtonType.Link">Редактировать</Button>
+            <Button Color="ButtonColor.Success" To="#" Type="ButtonType.Link">Запустить</Button>
+        </div>
+    </CardBody>
+</Card>
+
+@code {
+    [Parameter]
+    public Questionnaire _Questionnaire { get; set; }
+}

@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities.Enums
+﻿ namespace Domain.Entities.Enums
 {
     public enum QuestionnaireState
     {

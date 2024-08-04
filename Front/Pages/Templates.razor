@@ -1,0 +1,36 @@
+﻿@page "/templates"
+@using Front.Components.Questionnaire
+@inject HttpClient Http
+
+<PageTitle>Templates</PageTitle>
+
+<h3>Templates</h3>
+@if(questionnaires == null)
+{
+    <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Primary" Size="SpinnerSize.ExtraLarge" />
+}
+else
+{
+    <div class="container" style="max-width:1600px">
+        <div class="row">
+            @foreach (var questionnaire in questionnaires)
+            {
+                <div class="col">
+                    <QuestionnaireCardComponent _questionnaire="@questionnaire"></QuestionnaireCardComponent>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    List<Questionnaire>? questionnaires;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await Http.GetAsync("http://localhost:5239/api/Questionnaire");
+        response.EnsureSuccessStatusCode();
+        var jsonString = await response.Content.ReadAsStringAsync();
+        questionnaires = JsonConvert.DeserializeObject<List<Questionnaire>>(jsonString);
+    }
+}

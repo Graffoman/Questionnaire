@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json;
 using Services.Implementations.Mappings;
 using System.Text.Json.Serialization;
 
@@ -18,7 +19,7 @@ namespace WebApi
             InstallAutomapper(services);
             services.AddServices(Configuration);
             services.AddControllers()
-                    .AddNewtonsoftJson()
+                    .AddNewtonsoftJson(options => options.SerializerSettings.TypeNameHandling = TypeNameHandling.Auto)
                     .AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
             services.AddSwaggerGen();
             services.AddCors();
