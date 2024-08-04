@@ -8,7 +8,7 @@
         </div>
         <div class="form-check form-switch">
             <InputCheckbox class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" @bind-Value="@IsOptional"></InputCheckbox>
-            <label class="form-check-label" for="flexSwitchCheckDefault">Вопрос обязательный?</label>
+            <label class="form-check-label" for="flexSwitchCheckDefault">@(IsOptional ? "Вопрос обязательный" : "Вопрос не обязательный")</label>
         </div>
 
         @switch (_Question.Type)
@@ -40,11 +40,6 @@
             default:
                 break;
         }
-        <div>
-            <p>QuestionText=@QuestionText</p>
-            <p>IsOptional=@IsOptional</p>
-        </div>
-
     </CardBody>
 </Card>
 

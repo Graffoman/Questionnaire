@@ -2,6 +2,7 @@
 @page "/constructor/{questionnaireId}"
 @using Front.Components.Question
 @inject HttpClient Http
+@inject JsonSerializerSettings jsonSettings
 @inject NavigationManager NavigationManager
 
 <PageTitle>Constructor</PageTitle>
@@ -57,7 +58,7 @@ else
 			var response = await Http.GetAsync($"http://localhost:5239/api/Questionnaire/{QuestionnaireId}");
 			response.EnsureSuccessStatusCode();
 			var jsonString = await response.Content.ReadAsStringAsync();
-			_Questionnaire = JsonConvert.DeserializeObject<Questionnaire>(jsonString, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+			_Questionnaire = JsonConvert.DeserializeObject<Questionnaire>(jsonString, jsonSettings);
 
 			// _Questions = _Questionnaire.Questions.ToList();
 		}
