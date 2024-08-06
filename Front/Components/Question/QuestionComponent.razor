@@ -14,27 +14,47 @@
         @switch (_Question.Type)
         {
             case QuestionType.MultipleSelect:
-                <div>
-                    @foreach (var option in ((QuestionMultipleSelect)_Question).Options)
+                <Alert Color="AlertColor.Secondary">
+                    Введите варианты ответов на вопрос.
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleMultipleSelectAsync">Ответы</Button>
+                </Alert>
+                <Collapse @ref="MultipleSelectColapse" Class="mt-3">
+                    @for(int i = 0; i <Options.Count(); i++)
                     {
-                        <p>@option</p>
+                        <InputText class="form-control" Style="margin-top:10px;margin-bottom:10px" @bind-Value="@Options[i]">@Options[i]</InputText>
                     }
-                </div>
+                </Collapse>
                 break;
             case QuestionType.Select:
-                <div>
-                    @foreach (var option in ((QuestionSelect)_Question).Options)
+                <Alert Color="AlertColor.Secondary">
+                    Введите варианты ответов на вопрос.
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleSelectAsync">Ответы</Button>
+                </Alert>
+                <Collapse @ref="SelectColapse" Class="mt-3">
+                    @for (int i = 0; i < Options.Count(); i++)
                     {
-                        <p>@option</p>
+                        <InputText class="form-control" Style="margin-top:10px;margin-bottom:10px" @bind-Value="@Options[i]">@Options[i]</InputText>
                     }
-                </div>
+                </Collapse>
                 break;
 
             case QuestionType.IntRange:
-                <div>
-                    <p>От: @(((QuestionIntRange)_Question).Limits.From)</p>
-                    <p>До: @(((QuestionIntRange)_Question).Limits.To)</p>
-                </div>
+                <Alert Color="AlertColor.Secondary">
+                    Введите границы диапазона для ответа на вопрос.
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleIntRangeAsync">Границы диапазона</Button>
+                </Alert>
+                <Collapse @ref="IntRangeColapse" Class="mt-3">
+
+                    <div class="mb-3">
+                        <NumberInput TValue="int" @bind-Value="@From" Placeholder="Введите минимальное значение" />
+                        <span class="form-text">Минимальное значение.</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <NumberInput TValue="int" @bind-Value="@To" Placeholder="Введите максимальное значение" />
+                        <span class="form-text">Максимальное значение.</span>
+                    </div>
+                </Collapse>
                 break;
                 
             default:
@@ -48,12 +68,55 @@
     [Parameter]
     public Question _Question { get; set; }
 
+    private Question ExportQuestion { get; set; }
+
     private string QuestionText { get; set; }
     private bool IsOptional { get; set; }
+
+    private List<string> Options { get; set; }
+
+    private int From { get; set; }
+    private int To { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         QuestionText = _Question.QuestionText;
         IsOptional = _Question.IsOptional;
+
+        switch (_Question.Type)
+        {
+            case QuestionType.Text:
+                ExportQuestion = new QuestionText();
+                break;
+            case QuestionType.Checkbox:
+                ExportQuestion = new QuestionCheckbox();
+                break;
+            case QuestionType.MultipleSelect:
+                ExportQuestion = new QuestionMultipleSelect();
+                Options = ((QuestionMultipleSelect)_Question).Options;
+                break;
+            case QuestionType.Select:
+                ExportQuestion = new QuestionSelect();
+                Options = ((QuestionSelect)_Question).Options;
+                break;
+
+            case QuestionType.IntRange:
+                ExportQuestion = new QuestionIntRange();
+                From = ((QuestionIntRange)_Question).Limits.From;
+                To = ((QuestionIntRange)_Question).Limits.To;
+                break;
+                
+            default:
+                break;
+        }
     }
+
+    Collapse MultipleSelectColapse = default!;
+    private async Task ToggleMultipleSelectAsync() => await MultipleSelectColapse.ToggleAsync();
+
+    Collapse SelectColapse = default!;
+    private async Task ToggleSelectAsync() => await SelectColapse.ToggleAsync();
+
+    Collapse IntRangeColapse = default!;
+    private async Task ToggleIntRangeAsync() => await IntRangeColapse.ToggleAsync();
 }
