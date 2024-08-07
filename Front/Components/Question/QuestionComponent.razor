@@ -2,10 +2,12 @@
 <Card Style="width:40rem;margin:10px">
     <CardBody>
         <CardSubTitle Class="mb-2 text-muted">Тип: @_Question.Type</CardSubTitle>
+
         <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">Вопрос</label>
             <InputTextArea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind-Value="@QuestionText"></InputTextArea>
         </div>
+
         <div class="form-check form-switch">
             <InputCheckbox class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" @bind-Value="@IsOptional"></InputCheckbox>
             <label class="form-check-label" for="flexSwitchCheckDefault">@(IsOptional ? "Вопрос обязательный" : "Вопрос не обязательный")</label>
@@ -14,52 +16,82 @@
         @switch (_Question.Type)
         {
             case QuestionType.MultipleSelect:
-                <Alert Color="AlertColor.Secondary">
-                    Введите варианты ответов на вопрос.
-                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleMultipleSelectAsync">Ответы</Button>
-                </Alert>
-                <Collapse @ref="MultipleSelectColapse" Class="mt-3">
-                    @for(int i = 0; i <Options.Count(); i++)
-                    {
-                        <InputText class="form-control" Style="margin-top:10px;margin-bottom:10px" @bind-Value="@Options[i]">@Options[i]</InputText>
-                    }
-                </Collapse>
+                <div>
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleMultipleSelectAsync">
+                        Ввести варианты ответов <Icon Name="IconName.ChevronDown"></Icon>
+                    </Button>
+
+                    <Collapse @ref="MultipleSelectColapse" Class="mt-3">
+                        @for(int i = 0; i < Options.Count(); i++)
+                        {
+                            var iCopy = i;
+
+                            <div style="display: flex">
+                                <InputText class="form-control" Style="margin:10px 5px 10px 0" @bind-Value="@Options[iCopy]">@Options[iCopy]</InputText>
+                                <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Outline="true" style="margin:10px 0" @onclick="() => DeleteOption(Options[iCopy])">
+                                    <Icon Name="IconName.XLg"></Icon>
+                                </Button>
+                            </div>
+                        }
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Success" @onclick="AddOption">
+                            Добавить <Icon Name="IconName.PlusLg"></Icon>
+                        </Button>
+                    </Collapse>
+                </div>
                 break;
             case QuestionType.Select:
-                <Alert Color="AlertColor.Secondary">
-                    Введите варианты ответов на вопрос.
-                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleSelectAsync">Ответы</Button>
-                </Alert>
-                <Collapse @ref="SelectColapse" Class="mt-3">
-                    @for (int i = 0; i < Options.Count(); i++)
-                    {
-                        <InputText class="form-control" Style="margin-top:10px;margin-bottom:10px" @bind-Value="@Options[i]">@Options[i]</InputText>
-                    }
-                </Collapse>
-                break;
+                <div>
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleSelectAsync">
+                        Ввести варианты ответов <Icon Name="IconName.ChevronDown"></Icon>
+                    </Button>
 
+                    <Collapse @ref="SelectColapse" Class="mt-3">
+                        @for (int i = 0; i < Options.Count(); i++)
+                        {
+                            var iCopy = i;
+
+                            <div style="display: flex">
+                                <InputText class="form-control" Style="margin:10px 5px 10px 0" @bind-Value="@Options[iCopy]">@Options[iCopy]</InputText>
+                                <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Outline="true" style="margin:10px 0" @onclick="() => DeleteOption(Options[iCopy])">
+                                    <Icon Name="IconName.XLg"></Icon>
+                                </Button>
+                            </div>
+                        }
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Success" @onclick="AddOption">
+                            Добавить <Icon Name="IconName.PlusLg"></Icon>
+                        </Button>
+                    </Collapse>
+
+                </div>
+                break;
             case QuestionType.IntRange:
-                <Alert Color="AlertColor.Secondary">
-                    Введите границы диапазона для ответа на вопрос.
-                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleIntRangeAsync">Границы диапазона</Button>
-                </Alert>
-                <Collapse @ref="IntRangeColapse" Class="mt-3">
+                <div>
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleIntRangeAsync">
+                        Ввести границы диапазона <Icon Name="IconName.ChevronDown"></Icon>
+                    </Button>
 
-                    <div class="mb-3">
-                        <NumberInput TValue="int" @bind-Value="@From" Placeholder="Введите минимальное значение" />
-                        <span class="form-text">Минимальное значение.</span>
-                    </div>
+                    <Collapse @ref="IntRangeColapse" Class="mt-3">
+                        <div class="mb-3">
+                            <NumberInput TValue="int" @bind-Value="@From" Placeholder="Введите минимальное значение" />
+                            <span class="form-text">Минимальное значение.</span>
+                        </div>
 
-                    <div class="mb-3">
-                        <NumberInput TValue="int" @bind-Value="@To" Placeholder="Введите максимальное значение" />
-                        <span class="form-text">Максимальное значение.</span>
-                    </div>
-                </Collapse>
+                        <div class="mb-3">
+                            <NumberInput TValue="int" @bind-Value="@To" Placeholder="Введите максимальное значение" />
+                            <span class="form-text">Максимальное значение.</span>
+                        </div>
+                    </Collapse>
+                </div>
                 break;
-                
             default:
                 break;
         }
+
+        <div style="float: right">
+            <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Size="ButtonSize.Small">
+                Удалить вопрос <Icon Name="IconName.XLg"></Icon>
+            </Button>
+        </div>
     </CardBody>
 </Card>
 
@@ -105,7 +137,7 @@
                 From = ((QuestionIntRange)_Question).Limits.From;
                 To = ((QuestionIntRange)_Question).Limits.To;
                 break;
-                
+
             default:
                 break;
         }
@@ -119,4 +151,19 @@
 
     Collapse IntRangeColapse = default!;
     private async Task ToggleIntRangeAsync() => await IntRangeColapse.ToggleAsync();
+
+    private async Task DeleteQuestion()
+    {
+        
+    }
+
+    private async Task DeleteOption(string option)
+    {
+        await Task.Run(() => { Options.Remove(option); });
+    }
+
+    private async Task AddOption()
+    {
+        await Task.Run(() => { Options.Add("..."); });
+    }
 }
