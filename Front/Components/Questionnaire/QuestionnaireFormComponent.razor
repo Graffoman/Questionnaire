@@ -1,21 +1,35 @@
-﻿@if(_Questionnaire == null)
-{
-	
-}
-else
-{
-	<EditForm Model="_Questionnaire" OnSubmit="Submit">
+﻿
 
-	</EditForm>
-}
+<EditForm Model="_Questionnaire" OnSubmit="Submit">
+	@foreach (var question in _Questionnaire.Questions)
+	{
+		<QuestionComponent _Question="question" OnClickCallback="DeleteQuestion"></QuestionComponent>
+	}
+</EditForm>
 
 @code {
-	[Parameter]
-	[SupplyParameterFromForm]
+	[CascadingParameter]
 	public Questionnaire _Questionnaire { get; set; }
+
+	[SupplyParameterFromForm]
+	private Questionnaire ExportQuestionnaire { get; set; }
 
 	private void Submit()
 	{
+
+	}
+
+	private async Task DeleteQuestion(string questionId)
+	{
+		await Task.Run(() =>
+		{
+			var questionToRemove = _Questionnaire.Questions.Where(q => q.Id == questionId).First();
 		
+			if(questionToRemove != null)
+			{
+				_Questionnaire.Questions.Remove(questionToRemove);
+				StateHasChanged();
+			}
+		});
 	}
 }

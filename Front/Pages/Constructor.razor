@@ -1,6 +1,7 @@
 ﻿@page "/constructor"
 @page "/constructor/{questionnaireId}"
-@using Front.Components.Question
+@using Front.Components.Questionnaire
+@using Front.Components.Constructor
 @inject HttpClient Http
 @inject JsonSerializerSettings jsonSettings
 @inject NavigationManager NavigationManager
@@ -11,14 +12,17 @@
 
 @if(_Questionnaire == null)
 {
-	
+	<ConstructorComponent></ConstructorComponent>
 }
 else
 {
-	foreach (var question in _Questionnaire.Questions)
+	@* foreach (var question in _Questionnaire.Questions)
 	{
 		<QuestionComponent _Question="question"></QuestionComponent>
-	}
+	} *@
+	<CascadingValue Value="_Questionnaire">
+		<QuestionnaireFormComponent />
+	</CascadingValue>
 }
 
 @code {

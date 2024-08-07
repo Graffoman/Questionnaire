@@ -88,7 +88,7 @@
         }
 
         <div style="float: right">
-            <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Size="ButtonSize.Small">
+            <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Size="ButtonSize.Small" @onclick="DeleteQuestion">
                 Удалить вопрос <Icon Name="IconName.XLg"></Icon>
             </Button>
         </div>
@@ -100,7 +100,7 @@
     [Parameter]
     public Question _Question { get; set; }
 
-    private Question ExportQuestion { get; set; }
+    // private Question ExportQuestion { get; set; }
 
     private string QuestionText { get; set; }
     private bool IsOptional { get; set; }
@@ -118,22 +118,22 @@
         switch (_Question.Type)
         {
             case QuestionType.Text:
-                ExportQuestion = new QuestionText();
+                // ExportQuestion = new QuestionText();
                 break;
             case QuestionType.Checkbox:
-                ExportQuestion = new QuestionCheckbox();
+                // ExportQuestion = new QuestionCheckbox();
                 break;
             case QuestionType.MultipleSelect:
-                ExportQuestion = new QuestionMultipleSelect();
+                // ExportQuestion = new QuestionMultipleSelect();
                 Options = ((QuestionMultipleSelect)_Question).Options;
                 break;
             case QuestionType.Select:
-                ExportQuestion = new QuestionSelect();
+                // ExportQuestion = new QuestionSelect();
                 Options = ((QuestionSelect)_Question).Options;
                 break;
 
             case QuestionType.IntRange:
-                ExportQuestion = new QuestionIntRange();
+                // ExportQuestion = new QuestionIntRange();
                 From = ((QuestionIntRange)_Question).Limits.From;
                 To = ((QuestionIntRange)_Question).Limits.To;
                 break;
@@ -152,9 +152,9 @@
     Collapse IntRangeColapse = default!;
     private async Task ToggleIntRangeAsync() => await IntRangeColapse.ToggleAsync();
 
-    private async Task DeleteQuestion()
+    private async Task AddOption()
     {
-        
+        await Task.Run(() => { Options.Add("..."); });
     }
 
     private async Task DeleteOption(string option)
@@ -162,8 +162,11 @@
         await Task.Run(() => { Options.Remove(option); });
     }
 
-    private async Task AddOption()
+    [Parameter]
+    public EventCallback<string> OnClickCallback { get; set; }
+
+    private async Task DeleteQuestion()
     {
-        await Task.Run(() => { Options.Add("..."); });
+        await OnClickCallback.InvokeAsync(_Question.Id);
     }
 }
