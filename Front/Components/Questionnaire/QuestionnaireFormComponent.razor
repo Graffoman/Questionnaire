@@ -1,4 +1,31 @@
-﻿
+﻿<Card Color="CardColor.Light" Style="width:40rem;margin:10px">
+	<CardBody>
+		<div class="mb-3">
+			<label for="questionnaireName" class="form-label">Название опроса:</label>
+			<InputText class="form-control" id="questionnaireName" @bind-Value="_Questionnaire.Name"></InputText>
+		</div>
+
+		<div class="mb-3">
+			<label for="questionnaireState" class="form-label">Состояние опроса:</label>
+			<InputSelect class="form-control" id="questionnaireState" @bind-Value="_Questionnaire.State">
+				@foreach (QuestionnaireState option in Enum.GetValues(typeof(QuestionnaireState)))
+				{
+					<option checked="@(_Questionnaire.State == option)"
+							value="@option">
+						@option
+					</option>
+				}
+			</InputSelect>
+		</div>
+
+		<CardText>
+			<div class="mb-3">
+				<label for="questionnaireDescription" class="form-label">Описание опроса:</label>
+				<InputTextArea class="form-control" id="questionnaireDescription" rows="3" @bind-Value="_Questionnaire.Description"></InputTextArea>
+			</div>
+		</CardText>
+	</CardBody>
+</Card>
 
 <EditForm Model="_Questionnaire" OnSubmit="Submit">
 	@foreach (var question in _Questionnaire.Questions)
