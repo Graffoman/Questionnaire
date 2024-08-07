@@ -11,7 +11,7 @@
 
 @if(_Questionnaire == null)
 {
-	<QuestionCheckboxComponent></QuestionCheckboxComponent>
+	
 }
 else
 {
@@ -32,7 +32,7 @@ else
 		var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 		var path = uri.AbsolutePath;
 
-		if (path.Length > 12)
+		if (path != "/constructor")
 		{
 			var response = await Http.GetAsync($"http://localhost:5239/api/Questionnaire/{QuestionnaireId}");
 			response.EnsureSuccessStatusCode();
