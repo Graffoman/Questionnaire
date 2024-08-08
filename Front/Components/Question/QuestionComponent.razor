@@ -100,8 +100,6 @@
     [Parameter]
     public Question _Question { get; set; }
 
-    // private Question ExportQuestion { get; set; }
-
     private string QuestionText { get; set; }
     private bool IsOptional { get; set; }
 
@@ -110,7 +108,7 @@
     private int From { get; set; }
     private int To { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
         QuestionText = _Question.QuestionText;
         IsOptional = _Question.IsOptional;
@@ -118,22 +116,17 @@
         switch (_Question.Type)
         {
             case QuestionType.Text:
-                // ExportQuestion = new QuestionText();
                 break;
             case QuestionType.Checkbox:
-                // ExportQuestion = new QuestionCheckbox();
                 break;
             case QuestionType.MultipleSelect:
-                // ExportQuestion = new QuestionMultipleSelect();
                 Options = ((QuestionMultipleSelect)_Question).Options;
                 break;
             case QuestionType.Select:
-                // ExportQuestion = new QuestionSelect();
                 Options = ((QuestionSelect)_Question).Options;
                 break;
 
             case QuestionType.IntRange:
-                // ExportQuestion = new QuestionIntRange();
                 From = ((QuestionIntRange)_Question).Limits.From;
                 To = ((QuestionIntRange)_Question).Limits.To;
                 break;
