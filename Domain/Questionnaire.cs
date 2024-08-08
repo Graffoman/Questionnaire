@@ -9,7 +9,7 @@ namespace Domain.Entities
         public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public ICollection<Question> Questions { get; set; }
+        public List<Question> Questions { get; set; }
         public User Author { get; set; }
         public DateTime CreationDate { get; set; }
         public QuestionnaireState State { get; set; }
