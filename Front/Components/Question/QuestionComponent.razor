@@ -5,12 +5,12 @@
 
         <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">Вопрос</label>
-            <InputTextArea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind-Value="@QuestionText"></InputTextArea>
+            <InputTextArea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind-Value="@_Question.QuestionText" @bind-Value:after="ChangeQuestion"></InputTextArea>
         </div>
 
         <div class="form-check form-switch">
-            <InputCheckbox class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" @bind-Value="@IsOptional"></InputCheckbox>
-            <label class="form-check-label" for="flexSwitchCheckDefault">@(IsOptional ? "Вопрос обязательный" : "Вопрос не обязательный")</label>
+            <InputCheckbox class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" @bind-Value="@_Question.IsOptional" @bind-Value:after="ChangeQuestion"></InputCheckbox>
+            <label class="form-check-label" for="flexSwitchCheckDefault">@(_Question.IsOptional ? "Вопрос обязательный" : "Вопрос не обязательный")</label>
         </div>
 
         @switch (_Question.Type)
@@ -100,9 +100,6 @@
     [Parameter]
     public Question _Question { get; set; }
 
-    private string QuestionText { get; set; }
-    private bool IsOptional { get; set; }
-
     private List<string> Options { get; set; }
 
     private int From { get; set; }
@@ -110,15 +107,13 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        QuestionText = _Question.QuestionText;
-        IsOptional = _Question.IsOptional;
-
         switch (_Question.Type)
         {
             case QuestionType.Text:
                 break;
             case QuestionType.Checkbox:
                 break;
+
             case QuestionType.MultipleSelect:
                 Options = ((QuestionMultipleSelect)_Question).Options;
                 break;
@@ -156,10 +151,18 @@
     }
 
     [Parameter]
-    public EventCallback<string> OnClickCallback { get; set; }
+    public EventCallback<string> OnQuestionDelete { get; set; }
 
     private async Task DeleteQuestion()
     {
-        await OnClickCallback.InvokeAsync(_Question.Id);
+        await OnQuestionDelete.InvokeAsync(_Question.Id);
+    }
+
+    [Parameter]
+    public EventCallback<Question> OnQuestionChanged { get; set; }
+
+    private async Task ChangeQuestion()
+    {
+        await OnQuestionChanged.InvokeAsync(_Question);
     }
 }

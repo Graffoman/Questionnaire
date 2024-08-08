@@ -26,13 +26,15 @@
 		</CardText>
 	</CardBody>
 </Card>
-
-<EditForm Model="_Questionnaire" OnSubmit="Submit">
-	@foreach (var question in _Questionnaire.Questions)
+<div>
+	@for(int i = 0; i < _Questionnaire.Questions.Count(); i++)
 	{
-		<QuestionComponent _Question="question" OnClickCallback="DeleteQuestion"></QuestionComponent>
+		var iCopy = i;
+
+		<QuestionComponent _Question="_Questionnaire.Questions.ElementAt(iCopy)" OnQuestionDelete="DeleteQuestion" OnQuestionChanged="ChangeQuestion"></QuestionComponent>
 	}
-</EditForm>
+</div>
+
 
 @code {
 	[CascadingParameter]
@@ -46,16 +48,22 @@
 
 	}
 
-	private async Task DeleteQuestion(string questionId)
+	private void DeleteQuestion(string questionId)
 	{
-		await Task.Run(() =>
+		var questionToRemove = _Questionnaire.Questions.Where(q => q.Id == questionId).First();
+
+		if(questionToRemove != null)
 		{
-			var questionToRemove = _Questionnaire.Questions.Where(q => q.Id == questionId).First();
-		
-			if(questionToRemove != null)
-			{
-				_Questionnaire.Questions.Remove(questionToRemove);
-			}
-		});
+			_Questionnaire.Questions.Remove(questionToRemove);
+		}
+	}
+
+	private void ChangeQuestion(Question question)
+	{
+		var index = _Questionnaire.Questions.FindIndex(q => q.Id == question.Id);
+		if (index != -1)
+		{
+			_Questionnaire.Questions[index] = question;
+		}
 	}
 }
