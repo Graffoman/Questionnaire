@@ -5,7 +5,10 @@
 	{
 		var iCopy = i;
 
-		<QuestionComponent _Question="_Questionnaire.Questions.ElementAt(iCopy)" OnQuestionDelete="DeleteQuestion" OnQuestionChanged="ChangeQuestion"></QuestionComponent>
+		<QuestionComponent 
+			_Question="_Questionnaire.Questions.ElementAt(iCopy)" 
+			OnQuestionDelete="DeleteQuestion">
+		</QuestionComponent>
 	}
 </div>
 
@@ -21,15 +24,6 @@
 		if(questionToRemove != null)
 		{
 			_Questionnaire.Questions.Remove(questionToRemove);
-		}
-	}
-
-	private void ChangeQuestion(Question question)
-	{
-		var index = _Questionnaire.Questions.FindIndex(q => q.Id == question.Id);
-		if (index != -1)
-		{
-			_Questionnaire.Questions[index] = question;
 		}
 	}
 }
