@@ -6,7 +6,7 @@ namespace Domain.Entities.BaseClasses
     {
         public string Id { get; } = Guid.NewGuid().ToString();
         public QuestionType Type { get; set; }
-        public string QuestionText { get; set; }
-        public bool IsOptional { get; set; }
+        public string QuestionText { get; set; } = "Введите текст вопроса";
+        public bool IsOptional { get; set; } = false;
     }
 }

@@ -1,10 +1,16 @@
 ﻿using Domain.Entities.BaseClasses;
+using Domain.Entities.Enums;
 
 namespace Domain.Entities
 {
     public class QuestionSelect : Question
     {
-		public List<string>? Options { get; set; }
+        public QuestionSelect()
+        {
+            Type = QuestionType.Select;
+            Options = [];
+        }
+        public List<string> Options { get; set; }
 		public string? Answer { get; set; }
     }
 }
