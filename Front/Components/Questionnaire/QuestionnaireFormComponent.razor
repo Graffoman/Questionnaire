@@ -1,18 +1,21 @@
 ﻿<QuestionnaireHeaderComponent></QuestionnaireHeaderComponent>
-<CardFooter>
-	<Dropdown Color="DropdownColor.Secondary" Size="DropdownSize.Small">
-		<DropdownToggleButton>Добавить новый вопрос</DropdownToggleButton>
-		<DropdownMenu>
-			<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Text)">Текстовый</DropdownItem>
-			<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Checkbox)">Чекбокс</DropdownItem>
-			<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.IntRange)">Диапазон</DropdownItem>
-			<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Select)">Выбор из списка</DropdownItem>
-			<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.MultipleSelect)">Множественный выбор</DropdownItem>
-		</DropdownMenu>
-	</Dropdown>
-	<Button Color="ButtonColor.Success" Size="ButtonSize.Small"> Сохранить опрос</Button>
-	<Button Color="ButtonColor.Danger" Size="ButtonSize.Small"> Удалить опрос</Button>
-</CardFooter>
+
+<Card Color="CardColor.Light" Style="width:40rem;margin:10px">
+	<CardBody>
+		<Dropdown Color="DropdownColor.Secondary" Size="DropdownSize.Small">
+			<DropdownToggleButton>Добавить новый вопрос</DropdownToggleButton>
+			<DropdownMenu>
+				<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Text)">Текстовый</DropdownItem>
+				<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Checkbox)">Чекбокс</DropdownItem>
+				<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.IntRange)">Диапазон</DropdownItem>
+				<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Select)">Выбор из списка</DropdownItem>
+				<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.MultipleSelect)">Множественный выбор</DropdownItem>
+			</DropdownMenu>
+		</Dropdown>
+		<Button Color="ButtonColor.Success" Size="ButtonSize.Small"> Сохранить опрос</Button>
+		<Button Color="ButtonColor.Danger" Size="ButtonSize.Small"> Удалить опрос</Button>
+	</CardBody>
+</Card>
 
 <div>
 	@for(int i = 0; i < _Questionnaire.Questions.Count(); i++)
