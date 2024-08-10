@@ -10,7 +10,7 @@
 
 @if(_Questionnaire == null)
 {
-	<ConstructorComponent></ConstructorComponent>
+	<Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Primary" Size="SpinnerSize.ExtraLarge" />
 }
 else
 {
@@ -30,7 +30,25 @@ else
 		var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 		var path = uri.AbsolutePath;
 
-		if (path != "/constructor")
+		if (path == "/constructor")
+		{
+			_Questionnaire = new Questionnaire()
+			{
+				Name = "Введите название опроса",
+				Description = "Введите описание опроса",
+				State = QuestionnaireState.ReadyToUse,
+				Questions = new List<Question>(),
+				Author = new User()
+				{
+					Id = "664dbab12a682481a8f8bb1f",
+					UserId = "postgresIdRandomString",
+					FirstName = "Женька",
+					LastName = "Сишарпов",
+					Department = "Департамент IT"
+				}
+			};
+		}
+		else
 		{
 			var response = await Http.GetAsync($"http://localhost:5239/api/Questionnaire/{QuestionnaireId}");
 			response.EnsureSuccessStatusCode();
