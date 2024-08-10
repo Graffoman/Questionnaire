@@ -17,7 +17,7 @@
         {
             case QuestionType.MultipleSelect:
                 <div>
-                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleMultipleSelectAsync">
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Size="ButtonSize.Small" @onclick="ToggleMultipleSelectAsync">
                         Ввести варианты ответов <Icon Name="IconName.ChevronDown"></Icon>
                     </Button>
 
@@ -28,12 +28,12 @@
 
                             <div style="display: flex">
                                 <InputText class="form-control" Style="margin:10px 5px 10px 0" @bind-Value="@Options[iCopy]">@Options[iCopy]</InputText>
-                                <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Outline="true" style="margin:10px 0" @onclick="() => DeleteOption(Options[iCopy])">
+                                <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Outline="true" Size="ButtonSize.Small" style="margin:10px 0" @onclick="() => DeleteOption(Options[iCopy])">
                                     <Icon Name="IconName.XLg"></Icon>
                                 </Button>
                             </div>
                         }
-                        <Button Type="ButtonType.Button" Color="ButtonColor.Success" @onclick="AddOption">
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Success" Size="ButtonSize.Small" @onclick="AddOption">
                             Добавить <Icon Name="IconName.PlusLg"></Icon>
                         </Button>
                     </Collapse>
@@ -41,7 +41,7 @@
                 break;
             case QuestionType.Select:
                 <div>
-                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleSelectAsync">
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Size="ButtonSize.Small" @onclick="ToggleSelectAsync">
                         Ввести варианты ответов <Icon Name="IconName.ChevronDown"></Icon>
                     </Button>
 
@@ -52,12 +52,12 @@
 
                             <div style="display: flex">
                                 <InputText class="form-control" Style="margin:10px 5px 10px 0" @bind-Value="@Options[iCopy]">@Options[iCopy]</InputText>
-                                <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Outline="true" style="margin:10px 0" @onclick="() => DeleteOption(Options[iCopy])">
+                                <Button Type="ButtonType.Button" Color="ButtonColor.Danger" Outline="true" Size="ButtonSize.Small" style="margin:10px 0" @onclick="() => DeleteOption(Options[iCopy])">
                                     <Icon Name="IconName.XLg"></Icon>
                                 </Button>
                             </div>
                         }
-                        <Button Type="ButtonType.Button" Color="ButtonColor.Success" @onclick="AddOption">
+                        <Button Type="ButtonType.Button" Color="ButtonColor.Success" Size="ButtonSize.Small" @onclick="AddOption">
                             Добавить <Icon Name="IconName.PlusLg"></Icon>
                         </Button>
                     </Collapse>
@@ -66,7 +66,7 @@
                 break;
             case QuestionType.IntRange:
                 <div>
-                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" @onclick="ToggleIntRangeAsync">
+                    <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Size="ButtonSize.Small" @onclick="ToggleIntRangeAsync">
                         Ввести границы диапазона <Icon Name="IconName.ChevronDown"></Icon>
                     </Button>
 
