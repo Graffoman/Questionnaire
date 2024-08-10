@@ -40,14 +40,6 @@
 	[CascadingParameter]
 	public Questionnaire _Questionnaire { get; set; }
 
-	[SupplyParameterFromForm]
-	private Questionnaire ExportQuestionnaire { get; set; }
-
-	private void Submit()
-	{
-
-	}
-
 	private void DeleteQuestion(string questionId)
 	{
 		var questionToRemove = _Questionnaire.Questions.Where(q => q.Id == questionId).First();
