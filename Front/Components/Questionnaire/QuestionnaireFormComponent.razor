@@ -1,4 +1,18 @@
 ﻿<QuestionnaireHeaderComponent></QuestionnaireHeaderComponent>
+<CardFooter>
+	<Dropdown Color="DropdownColor.Secondary" Size="DropdownSize.Small">
+		<DropdownToggleButton>Добавить новый вопрос</DropdownToggleButton>
+		<DropdownMenu>
+			<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Text)">Текстовый</DropdownItem>
+			<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Checkbox)">Чекбокс</DropdownItem>
+			<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.IntRange)">Диапазон</DropdownItem>
+			<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Select)">Выбор из списка</DropdownItem>
+			<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.MultipleSelect)">Множественный выбор</DropdownItem>
+		</DropdownMenu>
+	</Dropdown>
+	<Button Color="ButtonColor.Success" Size="ButtonSize.Small"> Сохранить опрос</Button>
+	<Button Color="ButtonColor.Danger" Size="ButtonSize.Small"> Удалить опрос</Button>
+</CardFooter>
 
 <div>
 	@for(int i = 0; i < _Questionnaire.Questions.Count(); i++)
@@ -24,6 +38,35 @@
 		if(questionToRemove != null)
 		{
 			_Questionnaire.Questions.Remove(questionToRemove);
+		}
+	}
+
+	private void AddNewQuestion(QuestionType questionType)
+	{
+		switch (questionType)
+		{
+			case QuestionType.Text:
+				_Questionnaire.Questions.Add(new QuestionText());
+				break;
+
+			case QuestionType.Checkbox:
+				_Questionnaire.Questions.Add(new QuestionCheckbox());
+				break;
+
+			case QuestionType.IntRange:
+				_Questionnaire.Questions.Add(new QuestionIntRange());
+				break;
+
+			case QuestionType.Select:
+				_Questionnaire.Questions.Add(new QuestionSelect());
+				break;
+
+			case QuestionType.MultipleSelect:
+				_Questionnaire.Questions.Add(new QuestionMultipleSelect());
+				break;
+
+			default:
+				break;
 		}
 	}
 }
