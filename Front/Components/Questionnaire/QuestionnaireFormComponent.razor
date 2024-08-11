@@ -1,24 +1,30 @@
-﻿
-<QuestionnaireHeaderComponent />
+﻿<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+	<div>
+		<QuestionnaireHeaderComponent />
 
-<QuestionnaireCRUDButtonsPanelComponent OnNewQuestionAdd="AddNewQuestion" />
+		<QuestionnaireCRUDButtonsPanelComponent OnNewQuestionAdd="AddNewQuestion" />
 
-<div>
-	@for(int i = 0; i < _Questionnaire.Questions.Count(); i++)
-	{
-		var iCopy = i;
+		<div>
+			@for(int i = 0; i < _Questionnaire.Questions.Count(); i++)
+			{
+				var iCopy = i;
 
-		<QuestionComponent 
-			_Question="_Questionnaire.Questions.ElementAt(iCopy)" 
-			OnQuestionDelete="DeleteQuestion">
-		</QuestionComponent>
-	}
+				<QuestionComponent 
+					_Question="_Questionnaire.Questions.ElementAt(iCopy)" 
+					OnQuestionDelete="DeleteQuestion">
+				</QuestionComponent>
+			}
+		</div>
+
+		@if(_Questionnaire.Questions.Count > 3)
+		{
+			<QuestionnaireCRUDButtonsPanelComponent OnNewQuestionAdd="AddNewQuestion" />
+		}
+	</div>
+	<div>
+		<AddNewQuestionComponent OnNewQuestionAdd="AddNewQuestion" />
+	</div>
 </div>
-
-@if(_Questionnaire.Questions.Count > 3)
-{
-	<QuestionnaireCRUDButtonsPanelComponent OnNewQuestionAdd="AddNewQuestion" />
-}
 
 @code {
 	[CascadingParameter]

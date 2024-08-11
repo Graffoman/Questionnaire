@@ -1,0 +1,117 @@
+﻿@inject IJSRuntime JSRuntime
+
+<Card Style="width:40rem;margin:10px" Color="CardColor.Secondary">
+    <CardBody>
+        <CardTitle>Короткая справка по типам вопросов</CardTitle>
+        <CardSubTitle Class="mb-2 text-muted">Нажмите на плюс чтобы добавить новый вопрос</CardSubTitle>
+    </CardBody>
+</Card>
+
+<div style="font-size:small">
+    <Card Style="width:40rem;margin:10px" Color="CardColor.Light">
+        <CardBody>
+            <CardSubTitle Class="mb-2 text-muted">
+                <Button Color="ButtonColor.Success" Size="ButtonSize.Small" Style="margin-right:10px" @onclick="() => AddNewQuestion(QuestionType.Text)">
+                    <Icon Name="IconName.PlusLg"></Icon>
+                    Добавить вопрос
+                </Button>
+                Тип вопроса: @QuestionType.Text
+            </CardSubTitle>
+            <CardText>
+                Подразумевается текстовый ответ в свободной форме.<br />
+                Пример вопроса: <code>Что Вы думаете по поводу вашего начальника?</code><br />
+                Пример ответа: <code>Да мой начальник самый лучший! Всем бы такого. Жаль, что он такой один 🙃</code>
+            </CardText>
+        </CardBody>
+    </Card>
+
+    <Card Style="width:40rem;margin:10px" Color="CardColor.Light">
+        <CardBody>
+            <CardSubTitle Class="mb-2 text-muted">
+                <Button Color="ButtonColor.Success" Size="ButtonSize.Small" Style="margin-right:10px" @onclick="() => AddNewQuestion(QuestionType.Checkbox)">
+                    <Icon Name="IconName.PlusLg"></Icon>
+                    Добавить вопрос
+                </Button>
+                Тип вопроса: @QuestionType.Checkbox
+            </CardSubTitle>
+            <CardText>
+                Подразумевается ответ либо Да либо Нет.<br />
+                Пример вопроса: <code>Вы хотите в отпуск?</code><br />
+                Пример ответа: <code>Да</code> либо <code>Нет</code>
+            </CardText>
+        </CardBody>
+    </Card>
+
+    <Card Style="width:40rem;margin:10px" Color="CardColor.Light">
+        <CardBody>
+            <CardSubTitle Class="mb-2 text-muted">
+                <Button Color="ButtonColor.Success" Size="ButtonSize.Small" Style="margin-right:10px" @onclick="() => AddNewQuestion(QuestionType.IntRange)">
+                    <Icon Name="IconName.PlusLg"></Icon>
+                    Добавить вопрос
+                </Button>
+                Тип вопроса: @QuestionType.IntRange
+            </CardSubTitle>
+            <CardText>
+                Подразумевается ответ в виде диапазона чисел От и До.<br />
+                Пример вопроса: <code>Укажите верхнюю и нижнюю планку зп которую должен получать разработчик</code><br />
+                Пример ответа: от <code>100 000</code> р. до <code>666 666</code> р.
+            </CardText>
+        </CardBody>
+    </Card>
+
+    <Card Style="width:40rem;margin:10px" Color="CardColor.Light">
+        <CardBody>
+            <CardSubTitle Class="mb-2 text-muted">
+                <Button Color="ButtonColor.Success" Size="ButtonSize.Small" Style="margin-right:10px" @onclick="() => AddNewQuestion(QuestionType.Select)">
+                    <Icon Name="IconName.PlusLg"></Icon>
+                    Добавить вопрос
+                </Button>
+                Тип вопроса: @QuestionType.Select
+            </CardSubTitle>
+            <CardText>
+                Выбор одного варианта из предложенного списка.<br />
+                Пример вопроса: <code>Что из нижеперечисленного Вы бы хотели больше всего?</code><br />
+                Варианты ответа:<br />
+                <code>Лечь спать</code><br />
+                <code>Сходить погулять</code><br />
+                <code>Исправить баг</code><br />
+                Пример ответа: <code>Исправить баг</code>
+            </CardText>
+        </CardBody>
+    </Card>
+
+    <Card Style="width:40rem;margin:10px" Color="CardColor.Light">
+        <CardBody>
+            <CardSubTitle Class="mb-2 text-muted">
+                <Button Color="ButtonColor.Success" Size="ButtonSize.Small" Style="margin-right:10px" @onclick="() => AddNewQuestion(QuestionType.MultipleSelect)">
+                    <Icon Name="IconName.PlusLg"></Icon>
+                    Добавить вопрос
+                </Button>
+                Тип вопроса: @QuestionType.MultipleSelect
+            </CardSubTitle>
+            <CardText>
+                Выбор одного или более вариантов из предложенного списка.<br />
+                Пример вопроса: <code>Что из нижеперечисленного Вам знакомо?</code><br />
+                Варианты ответа:<br />
+                <code>Хорошая организация процессов в компании</code><br />
+                <code>Классные коллеги</code><br />
+                <code>Высокая ЗП</code><br />
+                Пример ответа:<br />
+                <code>Хорошая организация процессов в компании</code> и <code>Классные коллеги</code>
+            </CardText>
+        </CardBody>
+    </Card>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<QuestionType> OnNewQuestionAdd { get; set; }
+
+    private async Task AddNewQuestion(QuestionType questionType)
+    {
+        await OnNewQuestionAdd.InvokeAsync(questionType);
+        //// Не работает вызов кастомной js функции из ~js/scripts.js
+        // string[] args = [];
+        // await JSRuntime.InvokeVoidAsync("scrollToBottom", args);
+    }
+}
