@@ -1,36 +1,7 @@
-﻿@using AutoMapper
-@using Services.Contracts.QuestionnaireDto
-@inject HttpClient httpClient
-@inject JsonSerializerSettings jsonSettings
-@inject IMapper mapper
-@inject NavigationManager navigationManager
-
+﻿
 <QuestionnaireHeaderComponent></QuestionnaireHeaderComponent>
 
-<Card Color="CardColor.Light" Style="width:40rem;margin:10px">
-	<CardBody>
-		<Dropdown Color="DropdownColor.Secondary" Size="DropdownSize.Small">
-			<DropdownToggleButton>Добавить новый вопрос</DropdownToggleButton>
-			<DropdownMenu>
-				<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Text)"> Текстовый </DropdownItem>
-				<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Checkbox)"> Чекбокс </DropdownItem>
-				<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.IntRange)"> Диапазон </DropdownItem>
-				<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.Select)"> Выбор из списка </DropdownItem>
-				<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.MultipleSelect)"> Множественный выбор </DropdownItem>
-			</DropdownMenu>
-		</Dropdown>
-
-		@if (IsNewQuestionnaire)
-		{
-			<Button Color="ButtonColor.Success" Size="ButtonSize.Small" @onclick="CreateQuestionnaire"> Создать опрос</Button>
-		}
-		else
-		{
-			<Button Color="ButtonColor.Success" Size="ButtonSize.Small" @onclick="UpdateQuestionnaire"> Обновить опрос</Button>
-			<Button Color="ButtonColor.Danger" Size="ButtonSize.Small" @onclick="DeleteQuestionnaire"> Удалить опрос</Button>
-		}
-	</CardBody>
-</Card>
+<QuestionnaireCRUDButtonsPanelComponent OnNewQuestionAdd="AddNewQuestion"></QuestionnaireCRUDButtonsPanelComponent>
 
 <div>
 	@for(int i = 0; i < _Questionnaire.Questions.Count(); i++)
@@ -44,19 +15,11 @@
 	}
 </div>
 
+<QuestionnaireCRUDButtonsPanelComponent OnNewQuestionAdd="AddNewQuestion"></QuestionnaireCRUDButtonsPanelComponent>
 
 @code {
 	[CascadingParameter]
 	public Questionnaire _Questionnaire { get; set; }
-
-	private bool IsNewQuestionnaire;
-
-	protected override void OnInitialized()
-	{
-		IsNewQuestionnaire = _Questionnaire.Id == null ? true : false;
-	}
-
-	[Inject] protected ToastService ToastService { get; set; } = default!;
 
 	private void DeleteQuestion(string questionId)
 	{
@@ -95,81 +58,5 @@
 			default:
 				break;
 		}
-	}
-
-	private async Task CreateQuestionnaire()
-	{
-		var dto = mapper.Map<Questionnaire, CreateQuestionnaireDto>(_Questionnaire);
-		var payload = JsonConvert.SerializeObject(dto, jsonSettings);
-		var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
-		var responseMessage = await httpClient.PostAsync("Questionnaire/", content);
-
-		ToastMessage toastMessage = new();
-		toastMessage.HelpText = $"{DateTime.Now:HH:mm:ss dd.MM.yyyy}";
-
-		if (responseMessage.IsSuccessStatusCode)
-		{
-			toastMessage.Type = ToastType.Success;
-			toastMessage.Title = "Успех";
-			toastMessage.Message = $"Создан новый опрос. Кол-во вопросов: {_Questionnaire.Questions.Count}";
-		}
-		else
-		{
-			toastMessage.Type = ToastType.Danger;
-			toastMessage.Title = "Провал";
-			toastMessage.Message = $"Не удалось создать новый опрос. Кол-во вопросов: {_Questionnaire.Questions.Count}";
-		}
-
-		ToastService.Notify(toastMessage);
-	}
-
-	private async Task UpdateQuestionnaire()
-	{
-		var dto = mapper.Map<Questionnaire, UpdateQuestionnaireDto>(_Questionnaire);
-		var payload = JsonConvert.SerializeObject(dto, jsonSettings);
-		var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
-		var responseMessage = await httpClient.PutAsync($"Questionnaire/{_Questionnaire.Id}", content);
-
-		ToastMessage toastMessage = new();
-		toastMessage.HelpText = $"{DateTime.Now:HH:mm:ss dd.MM.yyyy}";
-
-		if (responseMessage.IsSuccessStatusCode)
-		{
-			toastMessage.Type = ToastType.Success;
-			toastMessage.Title = "Успех";
-			toastMessage.Message = $"Обновлен опрос. Кол-во вопросов: {_Questionnaire.Questions.Count}";
-		}
-		else
-		{
-			toastMessage.Type = ToastType.Danger;
-			toastMessage.Title = "Провал";
-			toastMessage.Message = $"Не удалось обновить опрос. Кол-во вопросов: {_Questionnaire.Questions.Count}";
-		}
-
-		ToastService.Notify(toastMessage);
-	}
-
-	private async Task DeleteQuestionnaire()
-	{
-		var responseMessage = await httpClient.DeleteAsync($"Questionnaire/{_Questionnaire.Id}");
-
-		ToastMessage toastMessage = new();
-		toastMessage.HelpText = $"{DateTime.Now:HH:mm:ss dd.MM.yyyy}";
-
-		if (responseMessage.IsSuccessStatusCode)
-		{
-			toastMessage.Type = ToastType.Success;
-			toastMessage.Title = "Успех";
-			toastMessage.Message = $"Опрос удален. Кол-во вопросов: {_Questionnaire.Questions.Count}";
-		}
-		else
-		{
-			toastMessage.Type = ToastType.Danger;
-			toastMessage.Title = "Провал";
-			toastMessage.Message = $"Не удалось удалить опрос. Кол-во вопросов: {_Questionnaire.Questions.Count}";
-		}
-
-		navigationManager.NavigateTo("/templates");
-		ToastService.Notify(toastMessage);
 	}
 }
