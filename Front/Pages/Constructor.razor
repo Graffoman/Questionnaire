@@ -1,6 +1,7 @@
 ﻿@page "/constructor"
 @page "/constructor/{questionnaireId}"
 @using Front.Components.Questionnaire
+@using Front.Components.TreePreview
 @inject HttpClient httpClient
 @inject JsonSerializerSettings jsonSettings
 @inject NavigationManager navigationManager
@@ -13,9 +14,18 @@
 }
 else
 {
-	<CascadingValue Value="_Questionnaire">
-		<QuestionnaireFormComponent />
-	</CascadingValue>
+	<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+		<div>
+			<CascadingValue Value="_Questionnaire">
+				<QuestionnaireFormComponent />
+			</CascadingValue>
+		</div>
+		<div>
+			<CascadingValue Value="_Questionnaire">
+				<TreePreviewComponent />
+			</CascadingValue>
+		</div>
+	</div>
 }
 
 @code {
