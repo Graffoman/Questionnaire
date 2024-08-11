@@ -1,0 +1,16 @@
+﻿@for (int i=0; i < _Questionnaire.Questions.Count; i++)
+{
+    var iCopy = i;
+
+    <Card Style="width:40rem;margin:10px">
+        <CardBody>
+            <CardSubTitle Class="mb-2 text-muted">@(iCopy + 1) @_Questionnaire.Questions[iCopy].Type</CardSubTitle>
+            <CardText>@_Questionnaire.Questions[iCopy].QuestionText</CardText>
+        </CardBody>
+    </Card>
+}
+
+@code {
+	[CascadingParameter]
+	public Questionnaire _Questionnaire { get; set; }
+}
