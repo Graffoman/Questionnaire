@@ -1,4 +1,10 @@
-﻿<QuestionnaireHeaderComponent></QuestionnaireHeaderComponent>
+﻿@using AutoMapper
+@using Services.Contracts.QuestionnaireDto
+@inject HttpClient httpClient
+@inject JsonSerializerSettings jsonSettings
+@inject IMapper mapper
+
+<QuestionnaireHeaderComponent></QuestionnaireHeaderComponent>
 
 <Card Color="CardColor.Light" Style="width:40rem;margin:10px">
 	<CardBody>
@@ -12,7 +18,7 @@
 				<DropdownItem Type="DropdownItemType.Button" @onclick="() => AddNewQuestion(QuestionType.MultipleSelect)">Множественный выбор</DropdownItem>
 			</DropdownMenu>
 		</Dropdown>
-		<Button Color="ButtonColor.Success" Size="ButtonSize.Small"> Сохранить опрос</Button>
+		<Button Color="ButtonColor.Success" Size="ButtonSize.Small" @onclick="InsertNewOrUpdateExistingQuestionnaire"> Сохранить опрос</Button>
 		<Button Color="ButtonColor.Danger" Size="ButtonSize.Small"> Удалить опрос</Button>
 	</CardBody>
 </Card>
@@ -33,6 +39,13 @@
 @code {
 	[CascadingParameter]
 	public Questionnaire _Questionnaire { get; set; }
+
+	private bool IsNewQuestionnaire;
+
+	protected override void OnInitialized()
+	{
+		IsNewQuestionnaire = _Questionnaire.Id == null ? true : false;
+	}
 
 	private void DeleteQuestion(string questionId)
 	{
@@ -70,6 +83,35 @@
 
 			default:
 				break;
+		}
+	}
+
+	private async Task InsertNewOrUpdateExistingQuestionnaire()
+	{
+		HttpResponseMessage responseMessage;
+
+		if (IsNewQuestionnaire)
+		{
+			var dto = mapper.Map<Questionnaire, CreateQuestionnaireDto>(_Questionnaire);
+			var payload = JsonConvert.SerializeObject(dto, jsonSettings);
+			var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
+			responseMessage = await httpClient.PostAsync("Questionnaire/", content);
+		}
+		else
+		{
+			var dto = mapper.Map<Questionnaire, UpdateQuestionnaireDto>(_Questionnaire);
+			var payload = JsonConvert.SerializeObject(dto, jsonSettings);
+			var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
+			responseMessage = await httpClient.PutAsync($"Questionnaire/{_Questionnaire.Id}", content);
+		}
+
+		if (responseMessage.IsSuccessStatusCode)
+		{
+
+		}
+		else
+		{
+			
 		}
 	}
 }

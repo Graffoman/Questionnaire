@@ -28,7 +28,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await Http.GetAsync("http://localhost:5239/api/Questionnaire");
+        var response = await Http.GetAsync("Questionnaire");
         response.EnsureSuccessStatusCode();
         var jsonString = await response.Content.ReadAsStringAsync();
         questionnaires = JsonConvert.DeserializeObject<List<Questionnaire>>(jsonString);
