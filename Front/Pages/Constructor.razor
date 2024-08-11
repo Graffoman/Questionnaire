@@ -3,7 +3,7 @@
 @using Front.Components.Questionnaire
 @inject HttpClient httpClient
 @inject JsonSerializerSettings jsonSettings
-@inject NavigationManager NavigationManager
+@inject NavigationManager navigationManager
 
 <PageTitle>Constructor</PageTitle>
 
@@ -26,7 +26,7 @@ else
 
 	protected override async Task OnInitializedAsync()
 	{
-		var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+		var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
 		var path = uri.AbsolutePath;
 
 		if (path == "/constructor")
