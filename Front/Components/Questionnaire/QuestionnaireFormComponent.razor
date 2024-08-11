@@ -15,7 +15,10 @@
 	}
 </div>
 
-<QuestionnaireCRUDButtonsPanelComponent OnNewQuestionAdd="AddNewQuestion"></QuestionnaireCRUDButtonsPanelComponent>
+@if(_Questionnaire.Questions.Count > 3)
+{
+	<QuestionnaireCRUDButtonsPanelComponent OnNewQuestionAdd="AddNewQuestion"></QuestionnaireCRUDButtonsPanelComponent>
+}
 
 @code {
 	[CascadingParameter]
