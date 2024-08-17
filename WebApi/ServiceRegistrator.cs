@@ -4,7 +4,6 @@ using WebApi.Settings;
 using Infrastructure.DataAcess;
 using Infrastructure.Repositories.Implementations;
 using Services.Implementations;
-using Domain.Entities.BaseClasses;
 using Domain.Entities;
 using Infrastructure.DataAcces;
 
