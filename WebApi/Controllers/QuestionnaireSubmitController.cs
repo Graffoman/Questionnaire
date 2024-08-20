@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
+using Services.Contracts.QuestionnaireDto;
 using Services.Contracts.QuestionnaireSubmit;
 
 namespace WebApi.Controllers
@@ -39,6 +41,16 @@ namespace WebApi.Controllers
         {
             var id = await _service.CreateAsync(createQuestionnaireSubmitDto);
             return Ok(id);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync(string id, UpdateQuestionnaireSubmitDto updateQuestionnaireSubmitDto)
+        {
+            var questionnaireSubmit = _mapper.Map<UpdateQuestionnaireSubmitDto, QuestionnaireSubmit>(updateQuestionnaireSubmitDto);
+            questionnaireSubmit.Id = id;
+
+            await _service.UpdateAsync(questionnaireSubmit);
+            return Ok();
         }
 
         [HttpDelete("{id}")]
