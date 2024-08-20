@@ -27,7 +27,9 @@ namespace WebApi
             MongoDBClassMap.RegisterClassMaps();
             serviceCollection
                 .AddSingleton<MongoDB<Questionnaire>>()
-                .AddSingleton<MongoDB<User>>();
+                .AddSingleton<MongoDB<User>>()
+                .AddSingleton<MongoDB<OpenQuestionnaire>>()
+                .AddSingleton<MongoDB<QuestionnaireSubmit>>();
             return serviceCollection;
         }
 
@@ -35,7 +37,9 @@ namespace WebApi
         {
             serviceCollection
                 .AddTransient<IQuestionnaireService, QuestionnaireService>()
-                .AddTransient<IUserService, UserService>();
+                .AddTransient<IUserService, UserService>()
+                .AddTransient<IOpenQuestionnaireService, OpenQuestionnaireService>()
+                .AddTransient<IQuestionnaireSubmitService, QuestionnaireSubmitService>();
             return serviceCollection;
         }
 
@@ -43,7 +47,9 @@ namespace WebApi
         {
             serviceCollection
                 .AddTransient<IQuestionnaireRepository, QuestionnaireRepository>()
-                .AddTransient<IUserRepository, UserRepository>();
+                .AddTransient<IUserRepository, UserRepository>()
+                .AddTransient<IOpenQuestionnaireRepository, OpenQuestionnaireRepository>()
+                .AddTransient<IQuestionnaireSubmitRepository, QuestionnaireSubmitRepository>();
             return serviceCollection;
         }
     }
