@@ -44,6 +44,22 @@ namespace Infrastructure.DataAcces
                     .SetIdGenerator(new StringObjectIdGenerator())
                     .SetSerializer(new StringSerializer(BsonType.ObjectId));
             });
+
+            BsonClassMap.RegisterClassMap<OpenQuestionnaire>(cm =>
+            {
+                cm.AutoMap();
+                cm.MapIdMember(x => x.Id)
+                    .SetIdGenerator(new StringObjectIdGenerator())
+                    .SetSerializer(new StringSerializer(BsonType.ObjectId));
+            });
+
+            BsonClassMap.RegisterClassMap<QuestionnaireSubmit>(cm =>
+            {
+                cm.AutoMap();
+                cm.MapIdMember(x => x.Id)
+                    .SetIdGenerator(new StringObjectIdGenerator())
+                    .SetSerializer(new StringSerializer(BsonType.ObjectId));
+            });
         }
     }
 }
