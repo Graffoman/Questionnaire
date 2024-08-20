@@ -33,7 +33,7 @@
             </InputSelect>
         </div>
         <div class="mb-3">
-            <label for="finalDateToSubmit" class="form-label">Выберите пользователя для отправки опроса:</label>
+            <label for="finalDateToSubmit" class="form-label">Выберите финальную дату приема ответов:</label>
             <DateInput TValue="DateTime" @bind-Value="@FinalDateToSubmit" id="finalDateToSubmit" 
                 EnableMinMax="true" Min="@DateTime.Today.AddDays(3)" Max="@DateTime.Today.AddMonths(1)" />
         </div>
