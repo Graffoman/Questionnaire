@@ -1,8 +1,9 @@
 ﻿using Domain.Entities.BaseClasses;
+using Domain.Entities.Interfaces;
 
 namespace Domain.Entities
 {
-    public class OpenQuestionnaire
+    public class OpenQuestionnaire : IIdentifieble
     {
         public string Id { get; set; }
         public User Respondent { get; set; }
