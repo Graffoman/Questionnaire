@@ -11,6 +11,10 @@ namespace Services.Implementations.Mappings
             CreateMap<CreateQuestionnaireSubmitDto, QuestionnaireSubmit>()
                 .ForMember(x => x.Id, map => map.Ignore())
                 .ForMember(x => x.SubmitDate, map => map.MapFrom(src => DateTime.Now));
+
+            CreateMap<UpdateQuestionnaireSubmitDto, QuestionnaireSubmit>()
+                .ForMember(x => x.Id, map => map.Ignore())
+                .ForMember(x => x.SubmitDate, map => map.MapFrom(src => DateTime.Now));
         }
     }
 }
