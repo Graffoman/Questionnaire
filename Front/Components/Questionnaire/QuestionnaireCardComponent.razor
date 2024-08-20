@@ -1,4 +1,9 @@
-﻿
+﻿@using AutoMapper
+@using Services.Contracts.OpenQuestionnaireDto
+@inject HttpClient httpClient
+@inject IMapper mapper
+@inject JsonSerializerSettings jsonSettings
+
 <Card Class="mb-4" Style="width:20rem; margin:10px">
     <img class="rounded-top" src="/images/questionnaire_placeholder3.png" alt="placeholder" style="max-height:200px; max-width:200px"/>
     <CardBody>
@@ -8,12 +13,98 @@
         <CardText>@_Questionnaire.Description</CardText>
         <div class="d-grid gap-2 d-md-block mt-2">
             <Button Color="ButtonColor.Primary" To="@($"/constructor/{_Questionnaire.Id}")" Type="ButtonType.Link">Редактировать</Button>
-            <Button Color="ButtonColor.Success" To="#" Type="ButtonType.Link">Запустить</Button>
+            <Button Color="ButtonColor.Success" @onclick="OnShowModalClick">Запустить</Button>
         </div>
     </CardBody>
 </Card>
 
+<Modal @ref="modal" title="Отправка опроса" UseStaticBackdrop="true" CloseOnEscape="false">
+    <BodyTemplate>
+        <div class="mb-3">
+            <label for="respondent" class="form-label">Выберите пользователя для отправки опроса:</label>
+            <InputSelect class="form-control" id="respondent" @bind-Value="@UserId">
+                <option selected> ... </option>
+                @foreach (User user in Users)
+                {
+                    <option value="@user.Id">
+                        @user.FirstName @user.LastName : @user.Department
+                    </option>
+                }
+            </InputSelect>
+        </div>
+        <div class="mb-3">
+            <label for="finalDateToSubmit" class="form-label">Выберите пользователя для отправки опроса:</label>
+            <DateInput TValue="DateTime" @bind-Value="@FinalDateToSubmit" id="finalDateToSubmit" 
+                EnableMinMax="true" Min="@DateTime.Today.AddDays(3)" Max="@DateTime.Today.AddMonths(1)" />
+        </div>
+    </BodyTemplate>
+    <FooterTemplate>
+        <Button Color="ButtonColor.Secondary" @onclick="OnHideModalClick">Закрыть</Button>
+        <Button Color="ButtonColor.Success" @onclick="SendQuestionnaireToOpenQuestions">Запустить</Button>
+    </FooterTemplate>
+</Modal>
+
 @code {
     [Parameter]
     public Questionnaire _Questionnaire { get; set; }
+
+    private List<User> Users;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await httpClient.GetAsync("Users");
+        response.EnsureSuccessStatusCode();
+        var jsonString = await response.Content.ReadAsStringAsync();
+        Users = JsonConvert.DeserializeObject<List<User>>(jsonString);
+    }
+
+    private Modal modal = default!;
+
+    private async Task OnShowModalClick()
+    {
+        await modal.ShowAsync();
+    }
+
+    private async Task OnHideModalClick()
+    {
+        await modal.HideAsync();
+    }
+
+    [Inject] protected ToastService ToastService { get; set; } = default!;
+
+    private string UserId;
+    private DateTime FinalDateToSubmit;
+
+    private async Task SendQuestionnaireToOpenQuestions()
+    {
+        var respondent = Users.Where(u => u.Id == UserId).First();
+
+        var dto = mapper.Map<CreateOpenQuestionnaireDto>(_Questionnaire);
+        dto.Respondent = respondent;
+        dto.FinalDateToSubmit = FinalDateToSubmit;
+
+        var payload = JsonConvert.SerializeObject(dto, jsonSettings);
+        var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
+        var responseMessage = await httpClient.PostAsync("OpenQuestionnaire/", content);
+
+        await modal.HideAsync();
+
+        ToastMessage toastMessage = new();
+        toastMessage.HelpText = $"{DateTime.Now:HH:mm:ss dd.MM.yyyy}";
+
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            toastMessage.Type = ToastType.Success;
+            toastMessage.Title = "Успех";
+            toastMessage.Message = $"Отправлен новый опрос. Кол-во вопросов: {_Questionnaire.Questions.Count}";
+        }
+        else
+        {
+            toastMessage.Type = ToastType.Danger;
+            toastMessage.Title = "Провал";
+            toastMessage.Message = $"Не удалось отправить новый опрос. Кол-во вопросов: {_Questionnaire.Questions.Count}";
+        }
+
+        ToastService.Notify(toastMessage);
+    }
 }
