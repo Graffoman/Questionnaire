@@ -1,6 +1,6 @@
 ﻿@page "/templates"
 @using Front.Components.Questionnaire
-@inject HttpClient Http
+@inject HttpClient httpClient
 
 <PageTitle>Templates</PageTitle>
 
@@ -28,7 +28,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var response = await Http.GetAsync("Questionnaire");
+        var response = await httpClient.GetAsync("Questionnaire");
         response.EnsureSuccessStatusCode();
         var jsonString = await response.Content.ReadAsStringAsync();
         questionnaires = JsonConvert.DeserializeObject<List<Questionnaire>>(jsonString);
