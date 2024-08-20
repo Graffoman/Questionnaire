@@ -19,4 +19,9 @@
     <ProjectReference Include="..\Services\Services.Contracts\Services.Contracts.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Components\QuestionnaireSubmit\" />
+    <Folder Include="Components\OpenQuestionnaire\" />
+  </ItemGroup>
+
 </Project>
