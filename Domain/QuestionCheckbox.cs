@@ -9,6 +9,6 @@ namespace Domain.Entities
 		{
 			Type = QuestionType.Checkbox;
 		}
-		public bool? Answer { get; set; }
+		public bool Answer { get; set; }
     }
 }
