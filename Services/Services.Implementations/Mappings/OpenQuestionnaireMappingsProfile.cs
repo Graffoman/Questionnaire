@@ -11,6 +11,9 @@ namespace Services.Implementations.Mappings
             CreateMap<CreateOpenQuestionnaireDto, OpenQuestionnaire>()
                 .ForMember(x => x.Id, map => map.Ignore())
                 .ForMember(x => x.Submitted, map => map.MapFrom(src => false));
-        }
+
+            CreateMap<UpdateOpenQuestionnaireDto, OpenQuestionnaire>()
+                .ForMember(x => x.Id, map => map.Ignore());
+		}
     }
 }
