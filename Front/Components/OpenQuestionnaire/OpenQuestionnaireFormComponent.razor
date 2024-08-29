@@ -1,0 +1,102 @@
+﻿@page "/openquestionnaires/{openQuestionnaireId}"
+
+@using AutoMapper
+@using Front.Components.OpenQuestionnaire
+@using Front.Components.Question
+@using Services.Contracts.OpenQuestionnaireDto
+@using Services.Contracts.QuestionnaireSubmitDto
+@inject HttpClient httpClient
+@inject JsonSerializerSettings jsonSettings
+@inject IMapper mapper
+
+<PageTitle>Open Questionnaire</PageTitle>
+
+@if (_OpenQuestionnaire == null)
+{
+	<Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Primary" Size="SpinnerSize.ExtraLarge" />
+}
+else
+{
+	<Card Color="CardColor.Secondary" Style="width:40rem;margin:10px">
+		<CardHeader>Дата завершения опроса: @_OpenQuestionnaire.FinalDateToSubmit.ToString("dd.MM.yyyy")</CardHeader>
+		<CardBody>
+			<CardTitle>@_OpenQuestionnaire.Name</CardTitle>
+			<CardSubTitle>Кол-во вопросов: @_OpenQuestionnaire.Questions.Count</CardSubTitle>
+			<CardText>Пожалуйста ответьте на вопросы ниже и подтвердите свои ответы до @_OpenQuestionnaire.FinalDateToSubmit.ToString("dd.MM.yyyy")</CardText>
+		</CardBody>
+	</Card>
+
+	@foreach (var question in _OpenQuestionnaire.Questions)
+	{
+		<OpenQuestionComponent _Question="@question"></OpenQuestionComponent>
+	}
+
+	<Button Type="ButtonType.Button" Color="ButtonColor.Success" Size="ButtonSize.Small" @onclick="CreateQuestionnaireSubmit">
+		Отправить <Icon Name="IconName.CardChecklist"></Icon>
+	</Button>
+}
+
+@code {
+	[Parameter]
+	public string OpenQuestionnaireId { get; set; }
+
+	OpenQuestionnaire _OpenQuestionnaire;
+
+	[Inject] protected ToastService ToastService { get; set; } = default!;
+
+	protected override async Task OnInitializedAsync()
+	{
+		var response = await httpClient.GetAsync($"OpenQuestionnaire/{OpenQuestionnaireId}");
+		response.EnsureSuccessStatusCode();
+		var jsonString = await response.Content.ReadAsStringAsync();
+		_OpenQuestionnaire = JsonConvert.DeserializeObject<OpenQuestionnaire>(jsonString, jsonSettings);
+	}
+
+	private async Task CreateQuestionnaireSubmit()
+	{
+		_OpenQuestionnaire.Submitted = true;
+
+		var dto = mapper.Map<OpenQuestionnaire, CreateQuestionnaireSubmitDto>(_OpenQuestionnaire);
+		var payload = JsonConvert.SerializeObject(dto, jsonSettings);
+		var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
+		var responseMessageForSubmit = await httpClient.PostAsync("QuestionnaireSubmit/", content);
+
+		ToastMessage toastMessage = new();
+		toastMessage.HelpText = $"{DateTime.Now:HH:mm:ss dd.MM.yyyy}";
+
+		if (responseMessageForSubmit.IsSuccessStatusCode)
+		{
+			var responseMessageForUpdate = await CloseQuestionnaire();
+
+			if (responseMessageForUpdate.IsSuccessStatusCode)
+			{
+				toastMessage.Type = ToastType.Success;
+				toastMessage.Title = "Успех";
+				toastMessage.Message = $"Опрос успешно заполнен. Кол-во вопросов: {_OpenQuestionnaire.Questions.Count}";
+			}
+			else
+			{
+				toastMessage.Type = ToastType.Danger;
+				toastMessage.Title = "Провал";
+				toastMessage.Message = "Не удалось обновить статус submitted=true для открытого опроса.";
+			}
+		}
+		else
+		{
+			toastMessage.Type = ToastType.Danger;
+			toastMessage.Title = "Провал";
+			toastMessage.Message = $"Не удалось отправиить заполненный опрос. Кол-во вопросов: {_OpenQuestionnaire.Questions.Count}";
+		}
+
+		ToastService.Notify(toastMessage);
+	}
+
+	private async Task<HttpResponseMessage> CloseQuestionnaire()
+	{
+		var dto = mapper.Map<OpenQuestionnaire, UpdateOpenQuestionnaireDto>(_OpenQuestionnaire);
+		var payload = JsonConvert.SerializeObject(dto, jsonSettings);
+		var content = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
+
+		return await httpClient.PutAsync($"OpenQuestionnaire/{_OpenQuestionnaire.Id}", content);
+	}
+}

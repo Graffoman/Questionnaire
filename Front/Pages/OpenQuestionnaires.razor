@@ -1,39 +1,36 @@
 ﻿@page "/openquestionnaires"
-@page "/openquestionnaires/{openquestionnaireId}"
+@using Front.Components.OpenQuestionnaire
 @inject HttpClient Http
 @inject JsonSerializerSettings jsonSettings
-@inject NavigationManager navigationManager
 
 <PageTitle>Open Questionnaires</PageTitle>
 
-<h3>Open Questionnaires</h3>
+@if (_OpenQuestionnaires == null)
+{
+    <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Primary" Size="SpinnerSize.ExtraLarge" />
+}
+else
+{
+    <div class="container" style="max-width:1600px">
+        <div class="row">
+            @foreach (var openQuestionnaire in _OpenQuestionnaires)
+            {
+                <div class="col">
+                    <OpenQuestionnaireCardComponent _OpenQuestionnaire="@openQuestionnaire"></OpenQuestionnaireCardComponent>
+                </div>
+            }
+        </div>
+    </div>
+}
 
 @code {
-    [Parameter]
-    public string OpenQuestionnaireId { get; set; }
-
     List<OpenQuestionnaire>? _OpenQuestionnaires;
-
-    OpenQuestionnaire _OpenQuestionnaire;
 
     protected override async Task OnInitializedAsync()
     {
-        var uri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
-        var path = uri.AbsolutePath;
-
-        if (path == "/openquestionnaires")
-        {
-            var response = await Http.GetAsync("OpenQuestionnaire");
-            response.EnsureSuccessStatusCode();
-            var jsonString = await response.Content.ReadAsStringAsync();
-            _OpenQuestionnaires = JsonConvert.DeserializeObject<List<OpenQuestionnaire>>(jsonString, jsonSettings);
-        }
-        else
-        {
-            var response = await Http.GetAsync($"OpenQuestionnaire/{OpenQuestionnaireId}");
-            response.EnsureSuccessStatusCode();
-            var jsonString = await response.Content.ReadAsStringAsync();
-            _OpenQuestionnaire = JsonConvert.DeserializeObject<OpenQuestionnaire>(jsonString, jsonSettings);
-        }
+        var response = await Http.GetAsync("OpenQuestionnaire");
+        response.EnsureSuccessStatusCode();
+        var jsonString = await response.Content.ReadAsStringAsync();
+        _OpenQuestionnaires = JsonConvert.DeserializeObject<List<OpenQuestionnaire>>(jsonString, jsonSettings);
     }
 }

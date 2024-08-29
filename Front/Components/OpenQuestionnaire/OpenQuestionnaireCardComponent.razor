@@ -1,0 +1,18 @@
+﻿
+<Card Class="mb-4" Style="width:20rem; margin:10px">
+    <img class="rounded-top" src="/images/questionnaire_placeholder2.png" alt="placeholder" style="max-height:200px; max-width:200px" />
+    <CardBody>
+        <CardTitle>@_OpenQuestionnaire.Name</CardTitle>
+        <CardSubTitle Class="mb-2 text-muted">Дата завершения опроса: @_OpenQuestionnaire.FinalDateToSubmit.ToString("dd.MM.yyyy")</CardSubTitle>
+        <CardSubTitle Class="mb-2 text-muted">Осталось дней: @((_OpenQuestionnaire.FinalDateToSubmit - DateTime.Today).Days)</CardSubTitle>
+        <CardSubTitle Class="mb-2 text-muted">Кол-во вопросов: @_OpenQuestionnaire.Questions.Count</CardSubTitle>
+        <div class="d-grid gap-2 d-md-block mt-2">
+            <Button Color="ButtonColor.Success" To="@($"/openquestionnaires/{_OpenQuestionnaire.Id}")" Type="ButtonType.Link">Пройти опрос</Button>
+        </div>
+    </CardBody>
+</Card>
+
+@code {
+    [Parameter]
+    public OpenQuestionnaire _OpenQuestionnaire { get; set; }
+}
