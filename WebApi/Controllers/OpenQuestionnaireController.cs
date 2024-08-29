@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
 using Services.Contracts.OpenQuestionnaireDto;
@@ -41,7 +42,17 @@ namespace WebApi.Controllers
             return Ok(id);
         }
 
-        [HttpDelete("{id}")]
+		[HttpPut("{id}")]
+		public async Task<IActionResult> UpdateAsync(string id, UpdateOpenQuestionnaireDto updateOpenQuestionnaireDto)
+		{
+			var openQuestionnaire = _mapper.Map<UpdateOpenQuestionnaireDto, OpenQuestionnaire>(updateOpenQuestionnaireDto);
+			openQuestionnaire.Id = id;
+
+			await _service.UpdateAsync(openQuestionnaire);
+			return Ok();
+		}
+
+		[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteByIdAsync(string id)
         {
             await _service.DeleteByIdAsync(id);
