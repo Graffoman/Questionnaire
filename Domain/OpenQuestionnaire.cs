@@ -12,6 +12,7 @@ namespace Domain.Entities
         }
 
         public string Id { get; set; }
+        public string Name { get; set; }
         public User Respondent { get; set; }
         public string QuestionnaireRunId { get; set; }
         public DateTime FinalDateToSubmit { get; set; }
