@@ -1,24 +1,33 @@
 ﻿
 <Card Style="width:40rem;margin:10px">
     <CardHeader Class="mb-2 text-muted">
-        @switch (_Question.Type)
-        {
-            case QuestionType.MultipleSelect:
-                <div>Можете выбрать несколько вариантов ответа </div>
-                break;
-            case QuestionType.Select:
-                <div>Можете выбрать лишь один вариант ответа </div>
-                break;
-            case QuestionType.IntRange:
-                <div>Нужно выбрать диапазон в рамках </div>
-                break;
-            case QuestionType.Checkbox:
-                <div>Нужно поставить галочку если ответ "Да" </div>
-                break;
-            default:
-                <div>Дайте ответ в свободной форме </div>
-                break;
-        }
+        <div style="display: flex; justify-content: space-between;">
+            @switch (_Question.Type)
+            {
+                case QuestionType.MultipleSelect:
+                    <div>Можете выбрать несколько вариантов ответа </div>
+                    break;
+                case QuestionType.Select:
+                    <div>Можете выбрать лишь один вариант ответа </div>
+                    break;
+                case QuestionType.IntRange:
+                    <div>Нужно выбрать диапазон в рамках </div>
+                    break;
+                case QuestionType.Checkbox:
+                    <div>Нужно поставить галочку если ответ "Да" </div>
+                    break;
+                default:
+                    <div>Дайте ответ в свободной форме </div>
+                    break;
+            }
+
+            @if (!_Question.IsOptional)
+            {
+                <div style="float: right">
+                    <Icon Name="IconName.ExclamationDiamondFill" Size="IconSize.x5" Color="IconColor.Warning" />
+                </div>
+            }
+        </div>
     </CardHeader>
     <CardBody>
         <CardText>@_Question.QuestionText</CardText>
