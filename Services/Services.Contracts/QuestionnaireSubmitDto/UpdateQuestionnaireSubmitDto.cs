@@ -1,9 +1,9 @@
 ﻿using Domain.Entities.BaseClasses;
 using Domain.Entities;
 
-namespace Services.Contracts.QuestionnaireSubmit
+namespace Services.Contracts.QuestionnaireSubmitDto
 {
-    public class CreateQuestionnaireSubmitDto
+    public class UpdateQuestionnaireSubmitDto
     {
         public User Respondent { get; set; }
         public string OpenQuestionnaireId { get; set; }

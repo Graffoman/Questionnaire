@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Services.Abstractions;
-using Services.Contracts.QuestionnaireSubmit;
+using Services.Contracts.QuestionnaireSubmitDto;
 using Services.Repositories.Abstractions;
 
 namespace Services.Implementations

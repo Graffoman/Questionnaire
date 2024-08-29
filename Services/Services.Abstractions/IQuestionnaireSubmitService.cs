@@ -1,5 +1,5 @@
 ﻿using Domain.Entities;
-using Services.Contracts.QuestionnaireSubmit;
+using Services.Contracts.QuestionnaireSubmitDto;
 
 namespace Services.Abstractions
 {

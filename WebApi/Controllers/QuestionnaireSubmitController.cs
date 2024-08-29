@@ -2,8 +2,7 @@
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services.Abstractions;
-using Services.Contracts.QuestionnaireDto;
-using Services.Contracts.QuestionnaireSubmit;
+using Services.Contracts.QuestionnaireSubmitDto;
 
 namespace WebApi.Controllers
 {
