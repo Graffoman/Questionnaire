@@ -15,6 +15,7 @@ namespace Front.Automapper
 			var configuration = new MapperConfiguration(cfg =>
 			{
 				cfg.AddProfile<QuestionnaireMappingsProfile>();
+				cfg.AddProfile<OpenQuestionnaireMappingsProfile>();
 			});
 			configuration.AssertConfigurationIsValid();
 			return configuration;
