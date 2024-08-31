@@ -18,11 +18,27 @@
 else
 {
 	<Card Color="CardColor.Secondary" Style="width:40rem;margin:10px">
-		<CardHeader>Дата завершения опроса: @_OpenQuestionnaire.FinalDateToSubmit.ToString("dd.MM.yyyy")</CardHeader>
+		@if (_OpenQuestionnaire.Submitted)
+		{
+			<CardHeader>
+				Опрос пройден <Icon Name="IconName.CheckCircleFill" Size="IconSize.x3" Color="IconColor.White" />
+			</CardHeader>
+		}
+		else
+		{
+			<CardHeader>Дата завершения опроса: @_OpenQuestionnaire.FinalDateToSubmit.ToString("dd.MM.yyyy")</CardHeader>
+		}
 		<CardBody>
 			<CardTitle>@_OpenQuestionnaire.Name</CardTitle>
-			<CardSubTitle>Кол-во вопросов: @_OpenQuestionnaire.Questions.Count</CardSubTitle>
-			<CardText>Пожалуйста ответьте на вопросы ниже и подтвердите свои ответы до @_OpenQuestionnaire.FinalDateToSubmit.ToString("dd.MM.yyyy")</CardText>
+			<CardSubTitle Class="mb-2 text-muted">Кол-во вопросов: @_OpenQuestionnaire.Questions.Count</CardSubTitle>
+			@if (_OpenQuestionnaire.Submitted)
+			{
+				<CardSubTitle Class="mb-2 text-muted">Респондент: @_OpenQuestionnaire.Respondent.FirstName @_OpenQuestionnaire.Respondent.LastName : @_OpenQuestionnaire.Respondent.Department</CardSubTitle>
+			}
+			else
+			{
+				<CardText>Пожалуйста ответьте на вопросы ниже и подтвердите свои ответы до @_OpenQuestionnaire.FinalDateToSubmit.ToString("dd.MM.yyyy")</CardText>
+			}
 		</CardBody>
 	</Card>
 
@@ -31,9 +47,12 @@ else
 		<OpenQuestionComponent _Question="@question"></OpenQuestionComponent>
 	}
 
-	<Button Type="ButtonType.Button" Color="ButtonColor.Success" Size="ButtonSize.Small" @onclick="CreateQuestionnaireSubmit">
-		Отправить <Icon Name="IconName.CardChecklist"></Icon>
-	</Button>
+	@if (!_OpenQuestionnaire.Submitted)
+	{
+		<Button Type="ButtonType.Button" Color="ButtonColor.Success" Size="ButtonSize.Small" @onclick="CreateQuestionnaireSubmit">
+			Отправить <Icon Name="IconName.CardChecklist"></Icon>
+		</Button>
+	}
 }
 
 @code {
