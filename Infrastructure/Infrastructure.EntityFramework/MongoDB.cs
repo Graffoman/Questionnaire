@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using Infrastructure.DataAcces;
+using MongoDB.Driver;
 
 namespace Infrastructure.DataAcess
 {
@@ -6,10 +7,10 @@ namespace Infrastructure.DataAcess
     {
         public IMongoCollection<T> Collection;
 
-        public MongoDB()
+        public MongoDB(MongoSettings settings)
         {
-            MongoClient client = new("mongodb://localhost:27017");
-            IMongoDatabase database = client.GetDatabase("db");
+            MongoClient client = new(settings.ConnectionString);
+            IMongoDatabase database = client.GetDatabase(settings.DatabaseName);
 
             string collectionName = typeof(T).Name.ToLower() + "s";
 
