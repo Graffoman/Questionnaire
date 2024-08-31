@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using RabbitMQ.Abstractions;
 using Services.Abstractions;
 using Services.Contracts.OpenQuestionnaireDto;
 
@@ -13,12 +15,14 @@ namespace WebApi.Controllers
         private readonly IOpenQuestionnaireService _service;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
+        private readonly IRabbitMqProducer _rabbitMqProducer;
 
-        public OpenQuestionnaireController(IOpenQuestionnaireService service, ILogger<OpenQuestionnaireController> logger, IMapper mapper)
+        public OpenQuestionnaireController(IOpenQuestionnaireService service, ILogger<OpenQuestionnaireController> logger, IMapper mapper, IRabbitMqProducer rabbitMqProducer)
         {
             _service = service;
             _logger = logger;
             _mapper = mapper;
+            _rabbitMqProducer = rabbitMqProducer;
         }
 
         [HttpGet("{id}")]
@@ -39,6 +43,15 @@ namespace WebApi.Controllers
         public async Task<IActionResult> CreateAsync(CreateOpenQuestionnaireDto createOpenQuestionnaireDto)
         {
             var id = await _service.CreateAsync(createOpenQuestionnaireDto);
+            var notification = new Notification()
+            {
+                MessageText = "Добрый день, пройдите пожалуйста по ссылке, чтобы пройти опрос.",
+                OpenQuestionnaireUrl = $"http://localhost:5286/openquestionnaires/{id}",
+                UserId = "Curent_Postgres_UserId"
+            };
+            var message = JsonConvert.SerializeObject(notification);
+            _rabbitMqProducer.SendMessage(message);
+
             return Ok(id);
         }
 
