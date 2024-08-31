@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Abstractions;
 using Services.Abstractions;
-using System.Text.Json;
 using Services.Contracts.UserDto;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
