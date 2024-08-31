@@ -1,11 +1,12 @@
 ﻿using Services.Abstractions;
 using Services.Repositories.Abstractions;
-using WebApi.Settings;
 using Infrastructure.DataAcess;
 using Infrastructure.Repositories.Implementations;
 using Services.Implementations;
 using Domain.Entities;
 using Infrastructure.DataAcces;
+using RabbitMQ.Abstractions;
+using RabbitMQ.Implementations;
 
 namespace WebApi
 {
@@ -13,12 +14,16 @@ namespace WebApi
     {
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
-            var applicationSettings = configuration.Get<ApplicationSettings>();
-            services.AddSingleton(applicationSettings)
+            var mongoSettings = configuration.GetSection("MongoSettings").Get<MongoSettings>();
+            var rabbitMqSettings = configuration.GetSection("RabbitSettings").Get<RabbitSettings>();
+
+            services.AddSingleton(mongoSettings)
+                    .AddSingleton(rabbitMqSettings)
                     .AddSingleton((IConfigurationRoot)configuration)
                     .InstallMongoDB()
                     .InstallServices()
-                    .InstallRepositories();
+                    .InstallRepositories()
+                    .InstallRabbitMQ();
             return services;
         }
 
@@ -50,6 +55,14 @@ namespace WebApi
                 .AddTransient<IUserRepository, UserRepository>()
                 .AddTransient<IOpenQuestionnaireRepository, OpenQuestionnaireRepository>()
                 .AddTransient<IQuestionnaireSubmitRepository, QuestionnaireSubmitRepository>();
+            return serviceCollection;
+        }
+
+        private static IServiceCollection InstallRabbitMQ(this IServiceCollection serviceCollection)
+        {
+            serviceCollection
+                .AddHostedService<RabbitMqConsumer>()
+                .AddTransient<IRabbitMqProducer, RabbitMqProducer>();
             return serviceCollection;
         }
     }

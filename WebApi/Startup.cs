@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Newtonsoft.Json;
+using RabbitMQ.Implementations;
 using Services.Implementations.Mappings;
 using System.Text.Json.Serialization;
 
