@@ -1,11 +1,27 @@
 ﻿
-<Card Style="width:40rem;margin:10px" Color="@cardColor">
+<Card Style="width:40rem;margin:10px" Color="CardColor.Light">
     <CardBody>
-        <CardSubTitle Class="mb-2 text-muted">Тип: @_Question.Type</CardSubTitle>
+        <CardSubTitle Class="mb-2 text-muted">
+            
+            <div style="display: flex; justify-content: space-between;">
+                <div>Тип: @_Question.Type</div>
+
+                @{
+                    var defaultText = "Введите текст вопроса";
+
+                    if (_Question.QuestionText == defaultText)
+                    {
+                        <div style="float: right">
+                            Новый вопрос <Icon Name="IconName.ExclamationDiamondFill" Size="IconSize.x5" Color="IconColor.Warning" />
+                        </div>
+                    }
+                }
+            </div>
+        </CardSubTitle>
 
         <div class="mb-3">
             <label for="exampleFormControlTextarea1" class="form-label">Вопрос</label>
-            <InputTextArea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind-Value="@_Question.QuestionText" @bind-Value:after="ChangeCardColor"></InputTextArea>
+            <InputTextArea class="form-control" id="exampleFormControlTextarea1" rows="3" @bind-Value="@_Question.QuestionText"></InputTextArea>
         </div>
 
         <div class="form-check form-switch">
@@ -117,8 +133,6 @@
             default:
                 break;
         }
-
-        ChangeCardColor();
     }
 
     Collapse MultipleSelectColapse = default!;
@@ -146,21 +160,5 @@
     private async Task DeleteQuestion()
     {
         await OnQuestionDelete.InvokeAsync(_Question.Id);
-    }
-
-    CardColor cardColor = CardColor.Light;
-
-    private void ChangeCardColor()
-    {
-        var defaultText = "Введите текст вопроса";
-
-        if (_Question.QuestionText == defaultText)
-        {
-            cardColor = CardColor.Warning;
-        }
-        else
-        {
-            cardColor = CardColor.Light;
-        }
     }
 }
