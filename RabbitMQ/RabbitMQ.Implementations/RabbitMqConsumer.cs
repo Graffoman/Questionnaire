@@ -3,6 +3,11 @@ using RabbitMQ.Client;
 using System.Text;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Abstractions;
+using Services.Abstractions;
+using System.Text.Json;
+using Services.Contracts.UserDto;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 
 namespace RabbitMQ.Implementations
@@ -12,10 +17,14 @@ namespace RabbitMQ.Implementations
         private IConnection _connection;
         private IModel _channel;
         private RabbitSettings _settings;
+        private IUserService _userService;
+        private ILogger _logger;
 
-        public RabbitMqConsumer(RabbitSettings settings)
+        public RabbitMqConsumer(RabbitSettings settings, IUserService userService, ILogger<RabbitMqConsumer> logger)
         {
             _settings = settings;
+            _userService = userService;
+            _logger = logger;
 
             var factory = new ConnectionFactory
             {
@@ -39,12 +48,21 @@ namespace RabbitMQ.Implementations
             stoppingToken.ThrowIfCancellationRequested();
 
             var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += (ch, ea) =>
+            consumer.Received += async (ch, ea) =>
             {
                 var content = Encoding.UTF8.GetString(ea.Body.ToArray());
+                _logger.LogInformation($"Получено сообщение из очереди: {_settings.UsersQueueName}");
 
-                // Каким-то образом обрабатываем полученное сообщение
-                Console.WriteLine($"Получено сообщение: {content}");
+                try
+                {
+                    var createUserDto = JsonConvert.DeserializeObject<CreateUserDto>(content);
+                    var id = await _userService.CreateAsync(createUserDto);
+                    _logger.LogInformation("Добавлен новый пользователь: {id}", id);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogWarning("Не удалось добавить нового пользователя из сообщения: {content}", content, e);
+                }
 
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
