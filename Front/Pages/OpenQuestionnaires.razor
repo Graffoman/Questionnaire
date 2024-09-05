@@ -16,7 +16,7 @@ else
             @foreach (var openQuestionnaire in _OpenQuestionnaires)
             {
                 <div class="col">
-                    <OpenQuestionnaireCardComponent _OpenQuestionnaire="@openQuestionnaire"></OpenQuestionnaireCardComponent>
+                    <OpenQuestionnaireCardComponent _OpenQuestionnaire="@openQuestionnaire" OnOpenQuestionnaireDelete="DeleteOpenQuestionnaire" />
                 </div>
             }
         </div>
@@ -32,5 +32,15 @@ else
         response.EnsureSuccessStatusCode();
         var jsonString = await response.Content.ReadAsStringAsync();
         _OpenQuestionnaires = JsonConvert.DeserializeObject<List<OpenQuestionnaire>>(jsonString, jsonSettings);
+    }
+
+    private void DeleteOpenQuestionnaire(string openQuestionnaireId)
+    {
+        var openQuestionnaireToRemove = _OpenQuestionnaires.Where(o => o.Id == openQuestionnaireId).First();
+
+        if (openQuestionnaireToRemove != null)
+        {
+            _OpenQuestionnaires.Remove(openQuestionnaireToRemove);
+        }
     }
 }
