@@ -47,7 +47,7 @@ namespace WebApi.Controllers
             {
                 MessageText = "Добрый день, пройдите пожалуйста по ссылке, чтобы пройти опрос.",
                 OpenQuestionnaireUrl = $"http://localhost:5286/openquestionnaires/{id}",
-                UserId = createOpenQuestionnaireDto.Respondent.Id,
+                UserId = createOpenQuestionnaireDto.Respondent.UserId,
                 Email = createOpenQuestionnaireDto.Respondent.Email
             };
             var message = JsonConvert.SerializeObject(notification);
