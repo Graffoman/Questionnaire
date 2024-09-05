@@ -12,8 +12,9 @@
         <CardSubTitle Class="mb-2 text-muted">Создан: @_Questionnaire.CreationDate.ToString("HH:mm dd.MM.yyyy")</CardSubTitle>
         <CardText>@_Questionnaire.Description</CardText>
         <div class="d-grid gap-2 d-md-block mt-2">
-            <Button Color="ButtonColor.Primary" To="@($"/constructor/{_Questionnaire.Id}")" Type="ButtonType.Link">Редактировать</Button>
-            <Button Color="ButtonColor.Success" @onclick="OnShowModalClick">Запустить</Button>
+            <Button Color="ButtonColor.Primary" To="@($"/constructor/{_Questionnaire.Id}")" Type="ButtonType.Link" Size="ButtonSize.Small">Редактировать</Button>
+            <Button Color="ButtonColor.Success" @onclick="OnShowModalClick" Size="ButtonSize.Small">Запустить</Button>
+            <Button Color="ButtonColor.Danger" @onclick="DeleteQuestionnaire" Size="ButtonSize.Small">Удалить</Button>
         </div>
     </CardBody>
 </Card>
@@ -103,6 +104,29 @@
             toastMessage.Type = ToastType.Danger;
             toastMessage.Title = "Провал";
             toastMessage.Message = $"Не удалось отправить новый опрос. Кол-во вопросов: {_Questionnaire.Questions.Count}";
+        }
+
+        ToastService.Notify(toastMessage);
+    }
+
+    private async Task DeleteQuestionnaire()
+    {
+        var responseMessage = await httpClient.DeleteAsync($"Questionnaire/{_Questionnaire.Id}");
+
+        ToastMessage toastMessage = new();
+        toastMessage.HelpText = $"{DateTime.Now:HH:mm:ss dd.MM.yyyy}";
+
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            toastMessage.Type = ToastType.Success;
+            toastMessage.Title = "Успех";
+            toastMessage.Message = $"Опросник удален. Кол-во вопросов: {_Questionnaire.Questions.Count}";
+        }
+        else
+        {
+            toastMessage.Type = ToastType.Danger;
+            toastMessage.Title = "Провал";
+            toastMessage.Message = $"Не удалось удалить опросник. Кол-во вопросов: {_Questionnaire.Questions.Count}";
         }
 
         ToastService.Notify(toastMessage);

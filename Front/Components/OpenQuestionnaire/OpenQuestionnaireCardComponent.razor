@@ -1,4 +1,5 @@
-﻿
+﻿@inject HttpClient httpClient
+
 <Card Class="mb-4" Style="width:20rem; margin:10px">
     @if (_OpenQuestionnaire.Submitted)
     {
@@ -22,28 +23,49 @@
         else
         {
             <CardSubTitle Class="mb-2 text-muted">
-                Дата завершения опроса: @_OpenQuestionnaire.FinalDateToSubmit.ToString("dd.MM.yyyy")
+                Завершение опроса: @_OpenQuestionnaire.FinalDateToSubmit.ToString("dd.MM.yyyy")
             <Icon Name="IconName.ExclamationCircleFill" Size="IconSize.x5" Color="IconColor.Warning" />
             </CardSubTitle>
             <CardSubTitle Class="mb-2 text-muted">Осталось дней: @((_OpenQuestionnaire.FinalDateToSubmit - DateTime.Today).Days)</CardSubTitle>
         }
         <CardSubTitle Class="mb-2 text-muted">Кол-во вопросов: @_OpenQuestionnaire.Questions.Count</CardSubTitle>
-        @if (_OpenQuestionnaire.Submitted)
-        {
-            <div class="d-grid gap-2 d-md-block mt-2">
-                <Button Color="ButtonColor.Success" To="@($"/openquestionnaires/{_OpenQuestionnaire.Id}")" Type="ButtonType.Link">Посмотреть вопросы</Button>
-            </div>
-        }
-        else
-        {
-            <div class="d-grid gap-2 d-md-block mt-2">
-                <Button Color="ButtonColor.Success" To="@($"/openquestionnaires/{_OpenQuestionnaire.Id}")" Type="ButtonType.Link">Пройти опрос</Button>
-            </div>
-        }
+
+        <div class="d-grid gap-2 d-md-block mt-2">
+            <Button Color="ButtonColor.Success" To="@($"/openquestionnaires/{_OpenQuestionnaire.Id}")" Type="ButtonType.Link" Size="ButtonSize.Small">
+                @(_OpenQuestionnaire.Submitted ? "Посмотреть вопросы" : "Пройти опрос")
+            </Button>
+
+            <Button Color="ButtonColor.Danger" @onclick="DeleteOpenQuestionnaire" Size="ButtonSize.Small">Удалить</Button>
+        </div>
     </CardBody>
 </Card>
 
 @code {
     [Parameter]
     public OpenQuestionnaire _OpenQuestionnaire { get; set; }
+
+    [Inject] protected ToastService ToastService { get; set; } = default!;
+
+    private async Task DeleteOpenQuestionnaire()
+    {
+        var responseMessage = await httpClient.DeleteAsync($"OpenQuestionnaire/{_OpenQuestionnaire.Id}");
+
+        ToastMessage toastMessage = new();
+        toastMessage.HelpText = $"{DateTime.Now:HH:mm:ss dd.MM.yyyy}";
+
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            toastMessage.Type = ToastType.Success;
+            toastMessage.Title = "Успех";
+            toastMessage.Message = $"Опросник удален. Кол-во вопросов: {_OpenQuestionnaire.Questions.Count}";
+        }
+        else
+        {
+            toastMessage.Type = ToastType.Danger;
+            toastMessage.Title = "Провал";
+            toastMessage.Message = $"Не удалось удалить опросник. Кол-во вопросов: {_OpenQuestionnaire.Questions.Count}";
+        }
+
+        ToastService.Notify(toastMessage);
+    }
 }
