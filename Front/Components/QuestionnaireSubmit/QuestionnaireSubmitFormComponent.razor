@@ -1,0 +1,47 @@
+﻿@page "/questionnairesubmits/{questionnaireSubmitId}"
+
+@inject HttpClient httpClient
+@inject JsonSerializerSettings jsonSettings
+
+<PageTitle>Questionnaire Submit</PageTitle>
+
+@if (_QuestionnaireSubmit == null)
+{
+	<Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Success" Size="SpinnerSize.ExtraLarge" />
+}
+else
+{
+	<Card Color="CardColor.Secondary" Style="width:40rem;margin:10px">
+		<CardHeader>
+			Пройден: @_QuestionnaireSubmit.SubmitDate.ToString("HH:mm:ss dd.MM.yyyy") 
+			<Icon Name="IconName.CheckCircleFill" Size="IconSize.x3" Color="IconColor.White" />
+		</CardHeader>
+		<CardBody>
+			<CardTitle>@_QuestionnaireSubmit.OpenQuestionnaireName</CardTitle>
+			<CardSubTitle Class="mb-2 text-muted">Кол-во вопросов: @_QuestionnaireSubmit.Questions.Count</CardSubTitle>
+			<CardSubTitle Class="mb-2 text-muted">
+				Респондент: @_QuestionnaireSubmit.Respondent.FirstName @_QuestionnaireSubmit.Respondent.LastName : @_QuestionnaireSubmit.Respondent.Department
+			</CardSubTitle>
+		</CardBody>
+	</Card>
+
+	@foreach (var question in _QuestionnaireSubmit.Questions)
+	{
+		<QuestionSubmitComponent _Question="@question" />
+	}
+}
+
+@code {
+	[Parameter]
+	public string QuestionnaireSubmitId { get; set; }
+
+	QuestionnaireSubmit _QuestionnaireSubmit;
+
+	protected override async Task OnInitializedAsync()
+	{
+		var response = await httpClient.GetAsync($"QuestionnaireSubmit/{QuestionnaireSubmitId}");
+		response.EnsureSuccessStatusCode();
+		var jsonString = await response.Content.ReadAsStringAsync();
+		_QuestionnaireSubmit = JsonConvert.DeserializeObject<QuestionnaireSubmit>(jsonString, jsonSettings);
+	}
+}

@@ -1,0 +1,60 @@
+﻿@inject HttpClient httpClient
+
+<Card Class="mb-4" Style="width:20rem; margin:10px">
+
+    <img class="rounded-top" src="/images/questionnaire_placeholder3.png" alt="placeholder" style="max-height:200px; max-width:200px" />
+
+    <CardBody>
+        <CardTitle>@_QuestionnaireSubmit.OpenQuestionnaireName</CardTitle>
+            <CardSubTitle Class="mb-2 text-muted">
+                Пройден: @_QuestionnaireSubmit.SubmitDate.ToString("HH:mm:ss dd.MM.yyyy") 
+                <Icon Name="IconName.CheckCircleFill" Size="IconSize.x5" Color="IconColor.Success" />
+            </CardSubTitle>
+            <CardSubTitle Class="mb-2 text-muted">
+                Респондент: @_QuestionnaireSubmit.Respondent.FirstName @_QuestionnaireSubmit.Respondent.LastName : @_QuestionnaireSubmit.Respondent.Department
+            </CardSubTitle>
+        <CardSubTitle Class="mb-2 text-muted">Кол-во вопросов: @_QuestionnaireSubmit.Questions.Count</CardSubTitle>
+
+        <div class="d-grid gap-2 d-md-block mt-2">
+            <Button Color="ButtonColor.Success" To="@($"/questionnairesubmits/{_QuestionnaireSubmit.Id}")" Type="ButtonType.Link" Size="ButtonSize.Small">
+                Ответы
+            </Button>
+
+            <Button Color="ButtonColor.Danger" @onclick="DeleteQuestionnaireSubmit" Size="ButtonSize.Small">Удалить</Button>
+        </div>
+    </CardBody>
+</Card>
+
+@code {
+    [Parameter]
+    public QuestionnaireSubmit _QuestionnaireSubmit { get; set; }
+
+    [Inject] protected ToastService ToastService { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<string> OnQuestionnaireSubmitDelete { get; set; }
+
+    private async Task DeleteQuestionnaireSubmit()
+    {
+        var responseMessage = await httpClient.DeleteAsync($"QuestionnaireSubmit/{_QuestionnaireSubmit.Id}");
+
+        ToastMessage toastMessage = new();
+        toastMessage.HelpText = $"{DateTime.Now:HH:mm:ss dd.MM.yyyy}";
+
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            toastMessage.Type = ToastType.Success;
+            toastMessage.Title = "Успех";
+            toastMessage.Message = $"Ответ на вопросник удален. Кол-во вопросов: {_QuestionnaireSubmit.Questions.Count}";
+        }
+        else
+        {
+            toastMessage.Type = ToastType.Danger;
+            toastMessage.Title = "Провал";
+            toastMessage.Message = $"Не удалось удалить ответ на вопросник. Кол-во вопросов: {_QuestionnaireSubmit.Questions.Count}";
+        }
+
+        await OnQuestionnaireSubmitDelete.InvokeAsync(_QuestionnaireSubmit.Id);
+        ToastService.Notify(toastMessage);
+    }
+}

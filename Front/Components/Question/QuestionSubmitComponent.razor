@@ -1,0 +1,129 @@
+﻿
+<Card Style="width:40rem;margin:10px">
+    <CardHeader Class="mb-2 text-muted">
+        <div style="display: flex; justify-content: space-between;">
+            @switch (_Question.Type)
+            {
+                case QuestionType.MultipleSelect:
+                    <div>Можно было выбрать несколько вариантов ответа </div>
+                    break;
+                case QuestionType.Select:
+                    <div>Можно было выбрать лишь один вариант ответа </div>
+                    break;
+                case QuestionType.IntRange:
+                    <div>Нужно было выбрать диапазон в рамках </div>
+                    break;
+                case QuestionType.Checkbox:
+                    <div>Нужно было поставить галочку если ответ "Да" </div>
+                    break;
+                default:
+                    <div>Нужно было дать ответ в свободной форме </div>
+                    break;
+            }
+
+            @if (!_Question.IsOptional)
+            {
+                <div style="float: right">
+                    Обязательный вопрос <Icon Name="IconName.ExclamationDiamondFill" Size="IconSize.x5" Color="IconColor.Warning" />
+                </div>
+            }
+        </div>
+    </CardHeader>
+    <CardBody>
+        <CardText>@_Question.QuestionText</CardText>
+
+        @switch (_Question.Type)
+        {
+            case QuestionType.MultipleSelect:
+                <div>
+                    @for (int i = 0; i < Options.Count(); i++)
+                    {
+                        var iCopy = i;
+
+                        <div style="display: flex; align-items: center">
+                            <InputText disabled class="form-control" Style="margin:5px 10px 5px 0" @bind-Value="@Options[iCopy]">@Options[iCopy]</InputText>
+
+                            @if (SelectedOptions.Contains(Options[iCopy]))
+                            {
+                                <Icon Name="IconName.CheckCircleFill" Size="IconSize.x3" Color="IconColor.Success" />
+                            }
+                            else
+                            {
+                                <Icon Name="IconName.Circle" Size="IconSize.x3" Color="IconColor.Success"></Icon>
+                            }
+                        </div>
+                    }
+                </div>
+                break;
+            case QuestionType.Select:
+                <div>
+                    @for (int i = 0; i < Options.Count(); i++)
+                    {
+                        var iCopy = i;
+
+                        <div style="display: flex; align-items: center">
+                            <InputText disabled class="form-control" Style="margin:5px 10px 5px 0" @bind-Value="@Options[iCopy]">@Options[iCopy]</InputText>
+
+                            @if (SelectedOption == Options[iCopy])
+                            {
+                                <Icon Name="IconName.CheckCircleFill" Size="IconSize.x3" Color="IconColor.Success" />
+                            }
+                            else
+                            {
+                                <Icon Name="IconName.Circle" Size="IconSize.x3" Color="IconColor.Success"></Icon>
+                            }
+                        </div>
+                    }
+                </div>
+                break;
+            case QuestionType.IntRange:
+                <div>
+                    <div class="mb-3">
+                        <NumberInput disabled TValue="int" @bind-Value="@(((QuestionIntRange)_Question).Answer.From)" />
+                        <span class="form-text">Минимальное значение: @(((QuestionIntRange)_Question).Limits.From)</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <NumberInput disabled TValue="int" @bind-Value="@(((QuestionIntRange)_Question).Answer.To)" />
+                        <span class="form-text">Максимальное значение: @(((QuestionIntRange)_Question).Limits.To)</span>
+                    </div>
+                </div>
+                break;
+            case QuestionType.Checkbox:
+                <InputCheckbox disabled @bind-Value="@(((QuestionCheckbox)_Question).Answer)"></InputCheckbox>
+                break;
+            case QuestionType.Text:
+                <InputTextArea disabled class="form-control" rows="3" @bind-Value="@(((QuestionText)_Question).Answer)"></InputTextArea>
+                break;
+            default:
+                break;
+        }
+    </CardBody>
+</Card>
+
+@code {
+    [Parameter]
+    public Question _Question { get; set; }
+
+    private List<string> Options { get; set; }
+    private List<string> SelectedOptions { get; set; }
+    private string SelectedOption { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        switch (_Question.Type)
+        {
+            case QuestionType.MultipleSelect:
+                Options = ((QuestionMultipleSelect)_Question).Options;
+                SelectedOptions = ((QuestionMultipleSelect)_Question).Answer;
+                break;
+
+            case QuestionType.Select:
+                Options = ((QuestionSelect)_Question).Options;
+                SelectedOption = ((QuestionSelect)_Question).Answer;
+                break;
+            default:
+                break;
+        }
+    }
+}
