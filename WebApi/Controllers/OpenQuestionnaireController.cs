@@ -47,7 +47,8 @@ namespace WebApi.Controllers
             {
                 MessageText = "Добрый день, пройдите пожалуйста по ссылке, чтобы пройти опрос.",
                 OpenQuestionnaireUrl = $"http://localhost:5286/openquestionnaires/{id}",
-                UserId = "Curent_Postgres_UserId"
+                UserId = createOpenQuestionnaireDto.Respondent.Id,
+                Email = createOpenQuestionnaireDto.Respondent.Email
             };
             var message = JsonConvert.SerializeObject(notification);
             _rabbitMqProducer.SendMessage(message);
