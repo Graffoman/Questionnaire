@@ -44,7 +44,7 @@ else
 
 	@foreach (var question in _OpenQuestionnaire.Questions)
 	{
-		<OpenQuestionComponent _Question="@question"></OpenQuestionComponent>
+		<OpenQuestionComponent _Question="@question" />
 	}
 
 	@if (!_OpenQuestionnaire.Submitted)
