@@ -1,11 +1,47 @@
 ﻿@page "/questionnairesubmits"
-@page "/questionnairesubmits/{questionnaireSubmitId}"
+
+@using Front.Components.QuestionnaireSubmit
 @inject HttpClient Http
+@inject JsonSerializerSettings jsonSettings
 
 <PageTitle>Questionnaire submits</PageTitle>
 
-<h3>Questionnaires submits</h3>
+@if (_QuestionnaireSubmits == null)
+{
+    <Spinner Class="me-3" Type="SpinnerType.Dots" Color="SpinnerColor.Success" Size="SpinnerSize.ExtraLarge" />
+}
+else
+{
+    <div class="container" style="max-width:1600px">
+        <div class="row">
+            @foreach (var questionnaireSubmit in _QuestionnaireSubmits)
+            {
+                <div class="col">
+                    <QuestionnaireSubmitCardComponent _QuestionnaireSubmit="@questionnaireSubmit" OnQuestionnaireSubmitDelete="DeleteQuestionnaireSubmit" />
+                </div>
+            }
+        </div>
+    </div>
+}
 
 @code {
+    List<QuestionnaireSubmit>? _QuestionnaireSubmits;
 
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await Http.GetAsync("QuestionnaireSubmit");
+        response.EnsureSuccessStatusCode();
+        var jsonString = await response.Content.ReadAsStringAsync();
+        _QuestionnaireSubmits = JsonConvert.DeserializeObject<List<QuestionnaireSubmit>>(jsonString, jsonSettings);
+    }
+
+    private void DeleteQuestionnaireSubmit(string questionnaireSubmitId)
+    {
+        var questionnaireSubmitToRemove = _QuestionnaireSubmits.Where(q => q.Id == questionnaireSubmitId).First();
+
+        if (questionnaireSubmitToRemove != null)
+        {
+            _QuestionnaireSubmits.Remove(questionnaireSubmitToRemove);
+        }
+    }
 }

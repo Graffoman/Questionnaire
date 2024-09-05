@@ -31,9 +31,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Front", "..\Front\Front.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RabbitMQ", "RabbitMQ", "{04A99C49-186C-4F4F-B588-9604A26A0213}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.Abstractions", "..\RabbitMQ\RabbitMQ.Abstractions\RabbitMQ.Abstractions.csproj", "{99AABF13-F585-4A60-9807-C1DD4B7997C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQ.Abstractions", "..\RabbitMQ\RabbitMQ.Abstractions\RabbitMQ.Abstractions.csproj", "{99AABF13-F585-4A60-9807-C1DD4B7997C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitMQ.Implementations", "..\RabbitMQ\RabbitMQ.Implementations\RabbitMQ.Implementations.csproj", "{A29F95E4-9242-4728-99CE-78E090D1EFD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitMQ.Implementations", "..\RabbitMQ\RabbitMQ.Implementations\RabbitMQ.Implementations.csproj", "{A29F95E4-9242-4728-99CE-78E090D1EFD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
