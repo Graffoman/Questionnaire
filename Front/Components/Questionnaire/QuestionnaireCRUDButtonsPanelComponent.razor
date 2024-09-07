@@ -74,6 +74,7 @@
 			toastMessage.Message = $"Не удалось создать новый опрос. Кол-во вопросов: {_Questionnaire.Questions.Count}";
 		}
 
+		navigationManager.NavigateTo("/templates");
 		ToastService.Notify(toastMessage);
 	}
 
@@ -100,6 +101,7 @@
 			toastMessage.Message = $"Не удалось обновить опрос. Кол-во вопросов: {_Questionnaire.Questions.Count}";
 		}
 
+		navigationManager.NavigateTo("/templates");
 		ToastService.Notify(toastMessage);
 	}
 
