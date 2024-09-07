@@ -8,6 +8,7 @@
 @inject HttpClient httpClient
 @inject JsonSerializerSettings jsonSettings
 @inject IMapper mapper
+@inject NavigationManager navigationManager
 
 <PageTitle>Open Questionnaire</PageTitle>
 
@@ -107,6 +108,7 @@ else
 			toastMessage.Message = $"Не удалось отправиить заполненный опрос. Кол-во вопросов: {_OpenQuestionnaire.Questions.Count}";
 		}
 
+		navigationManager.NavigateTo("/questionnairesubmits");
 		ToastService.Notify(toastMessage);
 	}
 
