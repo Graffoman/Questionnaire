@@ -90,7 +90,28 @@
                 </div>
                 break;
             case QuestionType.Checkbox:
-                <InputCheckbox disabled @bind-Value="@(((QuestionCheckbox)_Question).Answer)"></InputCheckbox>
+                @if (((QuestionCheckbox)_Question).Answer)
+                {
+                    <div style="display: flex; gap: 10px">
+                        <div>
+                            Да <Icon Name="IconName.CheckCircleFill" Size="IconSize.x3" Color="IconColor.Success" />
+                        </div>
+                        <div>
+                            Нет <Icon Name="IconName.Circle" Size="IconSize.x3" Color="IconColor.Success" />
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div style="display: flex; gap: 10px">
+                        <div>
+                            Да <Icon Name="IconName.Circle" Size="IconSize.x3" Color="IconColor.Success" />
+                        </div>
+                        <div>
+                            Нет <Icon Name="IconName.CheckCircleFill" Size="IconSize.x3" Color="IconColor.Success" />
+                        </div>
+                    </div>
+                }
                 break;
             case QuestionType.Text:
                 <InputTextArea disabled class="form-control" rows="3" @bind-Value="@(((QuestionText)_Question).Answer)"></InputTextArea>
